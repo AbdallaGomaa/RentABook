@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Books</title>
+		<link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+		<link type="text/css" rel="stylesheet" href="css/HomepageStyle.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+		<script src="js/Homepagejs.js" type="text/javascript"></script>
+		<script src="js/bootstrap.js" type="text/javascript"></script>
+	</head>
+	
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+				  <a class="navbar-brand" href="#top">Books</a>
+				</div>
+				
+				<div class="dropdown" id="dropdownM" style="float:left">
+				  <button type="button" id="Genre" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+					Search by Genre <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Comedy</a></li>
+					<li><a href="#">Fantasy</a></li>
+					<li><a href="#">Fiction</a></li>
+					<li><a href="#">Mystery</a></li>
+					<li><a href="#">Romance</a></li>
+					<li><a href="#">Science Fiction</a></li>
+					<li><a href="#">Thriller</a></li>
+				  </ul>
+				</div>
+				
+				<form class="navbar-form" role="search" style="float:left">
+				  <div class="form-group">
+					<input type="text" class="form-control" size="50" placeholder="Enter Book Title or Author's Name">
+				  </div>
+				  
+				  <button type="button" class="btn btn-default" onclick="location.href='resultspage.html';">
+					<span class="glyphicon glyphicon-search"></span>Search
+				  </button>
+				</form>
+				
+				<div style="float:right">
+					<button type="button" class="btn btn-default navbar-btn" onclick="location.href='/login';">Log In</button>
+					<button type="button" class="btn btn-default navbar-btn" onclick="location.href='/profile';">Profile</button>
+					<button type="button" class="btn btn-default navbar-btn" onclick="location.href='/signup';">Sign up</button>
+					<button type="button" class="btn btn-default navbar-btn" onclick="location.href='/signout';">Log Out</button>
+					<button type="button" class="btn btn-default navbar-btn">
+						<span class="glyphicon glyphicon-shopping-cart"></span>Cart
+					</button>
+				</div>
+			</div>
+		</nav>
+		
+		<div class="jumbotron" id="top">
+		  <div class="container">
+			<h1>BOOKS</h1>
+			<p>Make money of your unused books</p>
+		  </div>
+		</div> 
+		
+		<h2 id="MPB">Most Popular Books</h2>
+		
+		<div class="row">
+			  <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			   <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			   <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="../img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="../img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			   <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			   <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/harryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+		</div>
+		
+		<h2 id="MPB">Suggested Books</h2>
+		
+		<div class="row">
+			  <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			   <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			   <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			  <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			   <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/HarryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+			   <div class="col-md-2">
+				<div class="thumbnail">
+				  <img src="img/harryP.jpg" width="100" height="100">
+				  <div class="caption">
+					<h4>Harry Potter</h4>
+					<p>Fiction</p>
+					<p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="BookInfo.html" class="btn btn-default" role="button">View</a></p>
+				  </div>
+				</div>
+			  </div>
+		</div>
+		
+		<footer>
+            <div class="row">
+                <div id="footB" class="col-md-4">
+					<h2>About Us</h2>
+                </div>
+                <div id="footB" class="col-md-4">
+					<h2>Contact Us</h2>
+                </div>
+                <div id="footB" class="col-md-4">
+					<h2>FAQS</h2>
+                </div>
+            </div>
+		</footer>
+	
+	</body>
+
+</html>

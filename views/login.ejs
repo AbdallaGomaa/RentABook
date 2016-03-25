@@ -1,0 +1,87 @@
+<html>
+<head>
+       <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <link href="css/signup.css" rel="stylesheet">
+        <link href="css/HomepageStyle.css" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="navbar navbar-default navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+				  <a class="navbar-brand" href="index.html">Books</a>
+				</div>
+				
+				<div class="dropdown" id="dropdownM" style="float:left">
+				  <button type="button" id="Genre" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+					Search by Genre <span class="caret"></span>
+				  </button>
+				  <ul class="dropdown-menu">
+					<li><a href="#">Action</a></li>
+					<li><a href="#">Comedy</a></li>
+					<li><a href="#">Fantasy</a></li>
+					<li><a href="#">Fiction</a></li>
+					<li><a href="#">Mystery</a></li>
+					<li><a href="#">Romance</a></li>
+					<li><a href="#">Science Fiction</a></li>
+					<li><a href="#">Thriller</a></li>
+				  </ul>
+				</div>
+				
+				<form class="navbar-form" role="search" style="float:left">
+				  <div class="form-group">
+					<input type="text" class="form-control" size="50" placeholder="Enter Book Title or Author's Name">
+				  </div>
+				  
+				  <button type="button" class="btn btn-default" onclick="location.href='resultspage.html';">
+					<span class="glyphicon glyphicon-search"></span>Search
+				  </button>
+				</form>
+				
+				<div style="float:right">
+					<button type="button" class="btn btn-default navbar-btn" onclick="location.href='/login';">Log In</button>
+					<button type="button" class="btn btn-default navbar-btn" onclick="location.href='/profile';">Profile</button>
+					<button type="button" class="btn btn-default navbar-btn" onclick="location.href='/signup';">Sign up</button>
+					<button type="button" class="btn btn-default navbar-btn" onclick="location.href='/signout';">Log Out</button>
+					<button type="button" class="btn btn-default navbar-btn">
+						<span class="glyphicon glyphicon-shopping-cart"></span>Cart
+					</button>
+				</div>
+			</div>
+		</nav>
+    
+    <div class="spacer">
+		    &nbsp;
+		</div>
+    
+    <div class="container">
+        <h2> Please enter your details below to sign up </h2>
+
+        <form class="form-horizontal" role="form" action="/login" method="POST">
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="username">Username</label>
+            <div class="col-sm-10"> 
+              <input type="text" class="form-control" id="username" name="username" placeholder="Enter a username">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="password">Password</label>
+            <div class="col-sm-10"> 
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password">
+            </div>
+          </div>
+          <br>
+          <div class="form-group"> 
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-default">Log In</button>
+            </div>
+          </div>
+    </form>
+        
+    </div>
+
+</body>
+
+</html>

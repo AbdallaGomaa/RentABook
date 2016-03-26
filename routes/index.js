@@ -16,12 +16,18 @@ module.exports = function(passport){
 	/* GET login page. */
 	router.get('/', function(req, res) {
     	// Display the Login page with any flash message, if any
-		res.render('index', { message: req.flash('message') });
+		if(req.isAuthenticated())
+            res.render('index', {state: 'loggedIn' });
+        else
+            res.render('index', {state: 'loggedOut' });
 	});
     
 	router.get('/login', function(req, res) {
     	// Display the Login page with any flash message, if any
-		res.render('login', { message: req.flash('message') });
+        if(req.isAuthenticated())
+            res.render('login', {state: 'loggedIn'});
+        else
+            res.render('login', {state: 'loggedOut'});
 	});
     
 
@@ -34,7 +40,10 @@ module.exports = function(passport){
 
 	/* GET Registration Page */
 	router.get('/signup', function(req, res){
-		res.render('signup',{message: req.flash('message')});
+		if(req.isAuthenticated())
+            res.render('signup',{state: 'loggedIn'});
+        else
+            res.render('signup',{state: 'loggedOut'});
 	});
 
 	/* Handle Registration POST */
@@ -47,8 +56,21 @@ module.exports = function(passport){
 	/* GET Home Page */
 	router.get('/profile', isAuthenticated, function(req, res){
 		console.log(req.user);
-        res.render('profile', { user: req.user });
+        if(req.isAuthenticated())
+            res.render('profile', { user: req.user, state: 'loggedIn' });
+        else
+            res.render('profile', { user: req.user, state: 'loggedOut' });
 	});
+    
+    router.get('/facebook', passport.authenticate('facebook', { 
+        scope : ['email', 'user_birthday']
+    }));
+    
+    router.get('/facebook/callback',passport.authenticate('facebook', {
+            successRedirect : '/profile',
+            failureRedirect : '/'
+    }));
+
 
 	/* Handle Logout */
 	router.get('/signout', function(req, res) {

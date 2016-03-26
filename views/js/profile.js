@@ -12,6 +12,8 @@ $(document).ready(function(){
                 $.each(result.book, function(x, field){
                     $("#printbooks").append("Title: "+field.title +"<br>" + "Author: "+ field.author +"<br>" +"Price: "+ field.price +"<br>" + "Link: "+ field.photolink+"<br><br>");
                     //$("#printbooks").append("<li class= list-group-item>"+"Title: "+field.title +"<br>" + "Author: "+ field.author +"<br>" +"Price: "+ field.price +"<br>" + "Link: "+ field.photolink "</li>"); 
+                    $("#bookcount").empty();
+                    $("#bookcount").append(result.book.length);
                 });
             }
         });

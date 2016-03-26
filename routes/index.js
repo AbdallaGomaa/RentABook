@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var Book = require('../models/books');
+var User = require('../models/users');
+
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -70,7 +73,65 @@ module.exports = function(passport){
             successRedirect : '/profile',
             failureRedirect : '/'
     }));
+        router.post('/addbook', function(req,res){
+    //add book
+    addBook = function(){      
+        var newbook = new Book();
 
+                        // set the user's local credentials
+                        newbook.title = req.param('booktitle');
+                        newbook.author = req.param('bookauthor');
+                        newbook.price = req.param('bookprice');
+                        newbook.photolink = req.param('bookpic');
+                        newbook.user = req.user;
+                            newbook.save(function(err) {
+                            if (err){
+                                console.log('Error in Saving book: '+err);  
+                                throw err;  
+                            }
+                            console.log('Book Registration succesful');    
+                            });
+            }
+            // Delay the execution of findOrCreateUser and execute the method
+            process.nextTick(addBook);
+        
+        res.redirect('/');
+        
+    });
+    
+    router.get('/mybooks', function(req, res){
+        var books = [];
+        //db.getCollection('books').find({})
+        
+        //var i= Books; '
+        Book.find({}, function(err, users){
+            if(err)
+                throw err;
+        
+            for (i in users){
+                if(req.user==users[i].user){
+                    //console.log(users[i].title);
+                
+                    //console.log(JSON.stringify(returnedJSON, null, 2));
+                    var bookObj = {"title": users[i].title, 
+                                    "author": users[i].author, 
+                                    "price":users[i].price,
+                                    "photolink":users[i].photolink
+                                    };
+                    
+                    //returnedJSON.push(bookObj);
+                    books.push(bookObj);
+                    
+                }
+            }
+             var returnOBJ = {"code":200, 
+                                "book":books};
+            console.log(JSON.stringify(returnOBJ, null, 2));
+            res.write(JSON.stringify(returnOBJ, null, 2));
+            res.end();
+       
+        });
+    });
 
 	/* Handle Logout */
 	router.get('/signout', function(req, res) {

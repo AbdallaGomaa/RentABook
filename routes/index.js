@@ -288,7 +288,10 @@ module.exports = function(passport){
             if(err)
                 throw err;
             if(book){
-               res.render('BookInfo',{book: book});    
+               if(req.isAuthenticated())
+                    res.render('BookInfo',{book: book, state:'loggedIn'});  
+               else
+                    res.render('BookInfo',{book: book, state:'loggedOut'});  
             }
         });
     });

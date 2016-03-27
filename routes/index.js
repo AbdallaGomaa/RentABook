@@ -3,11 +3,24 @@ var router = express.Router();
 var Book = require('../models/books');
 var User = require('../models/users');
 var bCrypt = require('bcrypt-nodejs');
+var path = require('path'); 
+var fs = require('fs');
+var mongoose = require("mongoose");
+var multer  = require('multer');
+var Grid = require('gridfs-stream');
+var uid = require('uid2');
+ 
 
+var TARGET_PATH = 'views/uploads';
+var IMAGE_TYPES = ['image/jpeg', 'image/png'];  
 
 var createHash = function(password){
     return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
 }
+
+Grid.mongo = mongoose.mongo;
+ 
+var upload = multer({ dest: '../views/uploads/' })
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -18,6 +31,7 @@ var isAuthenticated = function (req, res, next) {
 	// if the user is not authenticated then redirect him to the login page
 	res.redirect('/');
 }
+
 
 module.exports = function(passport){
 
@@ -142,16 +156,74 @@ module.exports = function(passport){
             successRedirect : '/profile',
             failureRedirect : '/'
     }));
-        router.post('/addbook', function(req,res){
+    router.post('/addbook', upload.single('mypic'), function(req,res){
     //add book
-    addBook = function(){      
-        var newbook = new Book();
+       
+        var is;
+        var os;
+        var targetPath;
+        var targetName;
+        var tempPath = req.file.path;
+        //get the mime type of the file
+        var type = req.file.mimetype;
+        //get the extension of the file
+        var extension="jpeg";
+        console.log(extension);
 
+        //check to see if we support the file type
+        if (IMAGE_TYPES.indexOf(type) == -1) {
+          res.send(415, 'Supported image formats: jpeg, jpg, jpe, png.');
+        }
+
+        //create a new name for the image
+        targetName = uid(22) + '.' + extension;
+        console.log("targetName: "+targetName);
+        //determine the new path to save the image
+        targetPath = path.join(TARGET_PATH, targetName);
+        console.log("targetPath: "+targetPath);
+        //create a read stream in order to read the file
+        is = fs.createReadStream(tempPath);
+
+        //create a write stream in order to write the a new file
+        os = fs.createWriteStream(targetPath);
+
+        is.pipe(os);
+
+
+        //handle error
+        is.on('error', function() {
+          if (err) {
+            res.send(500, 'Something went wrong');
+          }
+        });
+        //if we are done moving the file
+        is.on('end', function() {
+
+
+          //delete file from temp folder
+          fs.unlink(tempPath, function(err) {
+            if (err) {
+              res.send(500, 'Something went wrong');
+            }
+
+            //send something nice to user
+
+
+          });
+        });
+    addBook = function(){
+         
+        
+        
+        
+        var newbook = new Book();
+        
+        
                         // set the user's local credentials
                         newbook.title = req.param('booktitle');
                         newbook.author = req.param('bookauthor');
-                        newbook.price = req.param('bookprice');
-                        newbook.photolink = req.param('bookpic');
+                        newbook.price = req.param('bookcost');
+                        newbook.photolink = targetName;
                         newbook.user = req.user;
                             newbook.save(function(err) {
                             if (err){
@@ -161,27 +233,23 @@ module.exports = function(passport){
                             console.log('Book Registration succesful');    
                             });
             }
-            // Delay the execution of findOrCreateUser and execute the method
+            // Delay the execution of addbook and execute the method
             process.nextTick(addBook);
         
-        res.redirect('/');
+        res.redirect('/profile');
         
     });
     
     router.get('/mybooks', function(req, res){
         var books = [];
-        //db.getCollection('books').find({})
         
-        //var i= Books; '
         Book.find({}, function(err, users){
             if(err)
                 throw err;
         
             for (i in users){
                 if(req.user==users[i].user){
-                    //console.log(users[i].title);
                 
-                    //console.log(JSON.stringify(returnedJSON, null, 2));
                     var bookObj = {"title": users[i].title, 
                                     "author": users[i].author, 
                                     "price":users[i].price,
@@ -201,6 +269,7 @@ module.exports = function(passport){
        
         });
     });
+    
 
 	/* Handle Logout */
 	router.get('/signout', function(req, res) {

@@ -294,6 +294,25 @@ module.exports = function(passport){
     });
     
 
+    router.post('/addreview', function(req,res) {
+        User.findOne({'username': req.param('username')}, function(err, user){
+            if(err)
+                throw err;
+            if(user){
+                var ratingObj={ratingUser: req.user.username,
+                               rating: req.body.star,
+                               review: req.param('review')};
+                user.reviews.push(ratingObj);
+                user.save(function(err) {
+                  if (err) throw err;
+                });
+            }
+            else
+                console.log('user not found');
+         });
+        res.redirect('/profile');
+    });
+    
 	/* Handle Logout */
 	router.get('/signout', function(req, res) {
 		req.logout();

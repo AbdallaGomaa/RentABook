@@ -8,4 +8,5 @@ module.exports = mongoose.model('User',{
     email: String,
     facebookToken: String,
     facebookId: String,
+    reviews: Array
 });

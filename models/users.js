@@ -8,5 +8,6 @@ module.exports = mongoose.model('User',{
     email: String,
     facebookToken: String,
     facebookId: String,
-    reviews: Array
+    reviews: Array,
+    averageRating: {type: Number, default:0}
 });

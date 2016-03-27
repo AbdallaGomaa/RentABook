@@ -151,6 +151,22 @@ module.exports = function(passport){
             res.render('profile', { user: req.user, state: 'loggedOut' });
 	});
     
+    router.get('/user', isAuthenticated, function(req, res){
+        User.findOne({'username': req.param('username')}, function(err, user){
+            if(err)
+                throw err;
+            if(user){
+                if(req.isAuthenticated())
+                    res.render('profile-2',{user: user, state:'loggedIn'});  
+                else
+                    res.render('profile-2',{user: user, state:'loggedOut'});  
+                }
+            else
+                console.log('user not found');
+         });
+       
+	});
+    
     router.get('/facebook', passport.authenticate('facebook', { 
         scope : ['email']
     }));
@@ -305,6 +321,7 @@ module.exports = function(passport){
             if(err)
                 throw err;
             if(user){
+                user.averageRating=((user.averageRating*user.reviews.length)+Number(req.body.star))/(user.reviews.length+1);
                 var ratingObj={ratingUser: req.user.username,
                                rating: req.body.star,
                                review: req.param('review')};
@@ -316,7 +333,7 @@ module.exports = function(passport){
             else
                 console.log('user not found');
          });
-        res.redirect('/profile');
+        res.redirect('/user?username='+req.param('username'));
     });
     
 	/* Handle Logout */

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Book = require('../models/books');
 var User = require('../models/users');
+var Message = require('../models/messages');
 var bCrypt = require('bcrypt-nodejs');
 var path = require('path'); 
 var fs = require('fs');
@@ -158,6 +159,7 @@ module.exports = function(passport){
     }));
     
     router.post('/addbook', upload.single('mypic'), function(req,res){
+    //router.post('/addbook', function(req,res){
     //add book
        if(req.file!=undefined){
             var is;
@@ -321,6 +323,83 @@ module.exports = function(passport){
 		req.logout();
 		res.redirect('/');
 	});
-
+    
+    /* Send a Message */
+    router.post('/sendMessage', function(req,res){
+    //send message
+        sendMess = function(){
+            var msg = new Message();
+            msg.from = req.user.username;
+            msg.to = req.param('to');
+            msg.theMessage = req.param('message');
+            
+            var toExists = false;
+            
+            User.find({}, function(err, users){
+                for(i in users){
+                    //console.log(users[i].local.username + "msg.to: " + msg.to);
+                    if(users[i].username == msg.to){
+                        toExists = true;
+                        //console.log("Went here");
+                        break;
+                    }
+                }
+                if(toExists){
+                    msg.save(function(err){
+                       if(err){
+                           console.log('Error sending message: ' + err);
+                           throw err;
+                       }
+                        console.log("Message sent");
+                    });
+                }
+                else{
+                    console.log("TO USER DOESN'T EXIST");
+                }
+            });
+            
+        };
+        // Delay the execution of findOrCreateUser and execute the method
+        process.nextTick(sendMess);
+        
+        res.redirect('/');
+        
+    });
+    
+    /* Get the messages */
+    router.get('/myMessages', function(req, res){
+        var messages = [];
+        //db.getCollection('books').find({})
+        
+        //var i= Books; '
+        Message.find({}, function(err, msgs){
+            if(err)
+                throw err;
+        
+            for (i in msgs){
+                if(req.user.username==msgs[i].to){
+                    //console.log(users[i].title);
+                
+                    //console.log(JSON.stringify(returnedJSON, null, 2));
+                    console.log(msgs[i]._id + msgs[i].from + msgs[i].to + msgs[i].theMessage);
+                    var msgObject = {
+                                    "_id": msgs[i]._id,
+                                    "from": msgs[i].from, 
+                                    "theMessage":msgs[i].theMessage
+                                    };
+                    
+                    //returnedJSON.push(bookObj);
+                    messages.push(msgObject);
+                    
+                }
+            }
+             var returnOBJ = {"code":200, 
+                                "messages":messages};
+            console.log(JSON.stringify(returnOBJ, null, 2));
+            res.write(JSON.stringify(returnOBJ, null, 2));
+            res.end();
+       
+        });
+    });
 	return router;
 }

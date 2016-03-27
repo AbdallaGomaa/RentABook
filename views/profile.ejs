@@ -47,10 +47,10 @@
 		    	<li class="active"><a data-toggle="tab" href="#home" id="acc">Account</a></li>
 		    	<li><a data-toggle="tab" href="#lend" id="mybookbutton">Renting</a></li>
 		    	<li><a data-toggle="tab" href="#rent">Borrowing</a></li>
-		    	<li><a data-toggle="tab" href="#messages">Messages <span class="badge">0</span></a></li>
+		    	<li><a data-toggle="tab" href="#messages" id="myMessages">Messages <span class="badge">0</span></a></li>
                 <li><a data-toggle="tab" href="#mybooks" >My Books<span class="badge" id="bookcount">0</span></a></li>
                 <li><a data-toggle="tab" href="#book">Add Book<span class="badge"></span></a></li>
-
+                <li><a data-toggle="tab" href="#sMessage">Send Message<span class="badge"></span></a></li>
 			</ul>
 
 			<div class="tab-content">
@@ -98,7 +98,11 @@
 		    	</div>
 		    	<div id="messages" class="tab-pane fade">
 		    		<h3>Messages</h3>
-		    		<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+		    		<p id ="printMessages"></p>
+                    <div class="panel-group">
+                      <div class="panel panel-default" id = "pMsg">
+                      </div>
+                    </div>
 		    	</div>
                 
                 <div id="mybooks" class="tab-pane fade">
@@ -175,20 +179,34 @@
                               </div>
 
                     </form>
+                 
+				</div>
+				
+				<div id="sMessage" class="tab-pane fade">
+		    		<h3>Send Message</h3>
+						
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                    <form class="form-horizontal" role="form" action="/sendMessage" method="POST">
+                              <div class="form-group">
+                                <label class="control-label col-sm-2" for="to">To</label>
+                                <div class="col-sm-10">
+                                  <input type="text" class="form-control" id="to" name="to" placeholder="Enter username you would like to send to">
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <label class="control-label col-sm-2" for="message">Message</label>
+                                <div class="col-sm-10"> 
+                                  <input type="text" class="form-control" id="message" name="message" placeholder="Enter the message">
+                                </div>
+                              </div>
+                              <div class="form-group"> 
+                               <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </div>
+                              </div>
+
+                    </form>
+                 
 				</div>
 			</div>
 		</div>

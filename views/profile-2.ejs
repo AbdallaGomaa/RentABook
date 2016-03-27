@@ -64,6 +64,14 @@
                     <p>Name: <%= user.firstName+" " %><%= user.lastName %></p>
                     <p>Email: <%=user.email%></p>
                 </div>
+                <form class="form-horizontal" role="form" action="/sendMessage" method="POST">
+                    <input type="hidden" class="form-control" id="to" name="to" value= "<%=user.username %>" placeholder="<%=user.username %>">
+                    <textarea rows="10" cols="50" id="message" name="message" placeholder="Enter message here...." style="color:black;"></textarea>
+                    &nbsp
+                    <button type="submit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-envelope"></span>Send Message
+                    </button>
+                </form>
             </div>
             
             <div id="ad" class="tab-pane fade in">

@@ -26,3 +26,7 @@ h1, h2, h3, h4, h5, p{
 #dropdownM{
 	padding-top: 7px;
 }
+
+body{
+	background-image:url(../img/Background.png);
+}

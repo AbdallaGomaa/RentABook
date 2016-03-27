@@ -82,8 +82,14 @@
 	    <div id="miniNav" class="container">
 	    	<div class="row">
 			    <div class="col-sm-1"><img src="img/user_icon.png" class="img-circle" alt="Cinque Terre" width="50" height="50"></div>
-			    <div class="col-sm-11"><h2><%= user.username %></h2></div>
-			 </div>
+			    <div class="col-sm-11">
+                   <% if(user.facebook.firstName===undefined){ %>
+                       <h2><%= user.local.firstName+" " %><%= user.local.lastName %></h2>
+                   <% }else{ %>
+                       <h2><%= user.facebook.firstName+" " %><%= user.facebook.lastName %></h2>
+                   <% } %>
+                </div>
+            </div>
 			<ul class="nav nav-tabs">
 		    	<li class="active"><a data-toggle="tab" href="#home" id="acc">Account</a></li>
 		    	<li><a data-toggle="tab" href="#lend">Renting</a></li>

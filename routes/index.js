@@ -2,7 +2,12 @@ var express = require('express');
 var router = express.Router();
 var Book = require('../models/books');
 var User = require('../models/users');
+var bCrypt = require('bcrypt-nodejs');
 
+
+var createHash = function(password){
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
+}
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -23,7 +28,71 @@ module.exports = function(passport){
             res.render('index', {state: 'loggedIn' });
         else
             res.render('index', {state: 'loggedOut' });
+	});	
+    
+    router.get('/admin', function(req, res) {
+		if(req.isAuthenticated())
+            res.render('admin', {state: 'loggedIn' });
+        else
+            res.render('admin', {state: 'loggedOut' });
 	});
+    
+    router.post('/changePass',function(req, res, username){ 
+        User.findOne({'local.username': req.body.username}, function(err, user){
+            if(err)
+                throw err;
+            if(user){
+                user.local.password = createHash(req.body.password);
+                  user.save(function(err) {
+                    if (err) throw err;
+                  });
+                console.log('password changed');
+            }
+            else
+                console.log('user not found');
+         });
+        res.redirect('/');
+    });
+    
+    router.post('/changeInfo',function(req, res, username){ 
+        User.findOne({'local.username': req.body.username}, function(err, user){
+            var variable = req.body.infoChange;
+            if(err)
+                throw err;
+            if(user){
+                if(variable=='firstName')
+                    user.local.firstName = req.body.change;
+                else if(variable=='lastName')
+                    user.local.lastName = req.body.change;
+                else if(variable=='email')
+                    user.local.email = req.body.change;
+                user.save(function(err) {
+                  if (err) throw err;
+                });
+                console.log(variable+' Changed');
+            }
+            else
+                console.log('user not found');
+         });
+        res.redirect('/');
+    });
+
+    router.post('/deleteUser',function(req, res, username){ 
+        User.findOne({'local.username': req.body.username}, function(err, user){
+            var variable = req.body.infoChange;
+            if(err)
+                throw err;
+            if(user){
+                  user.remove(function(err) {
+                  if (err) throw err;
+                  });
+                  console.log('User Deleted')
+            }
+            else
+                console.log('user not found');
+        });
+        res.redirect('/');
+    });
     
 	router.get('/login', function(req, res) {
     	// Display the Login page with any flash message, if any

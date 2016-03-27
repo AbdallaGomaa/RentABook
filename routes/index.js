@@ -52,11 +52,11 @@ module.exports = function(passport){
 	});
     
     router.post('/changePass',function(req, res, username){ 
-        User.findOne({'local.username': req.body.username}, function(err, user){
+        User.findOne({'username': req.body.username}, function(err, user){
             if(err)
                 throw err;
             if(user){
-                user.local.password = createHash(req.body.password);
+                user.password = createHash(req.body.password);
                   user.save(function(err) {
                     if (err) throw err;
                   });
@@ -69,17 +69,17 @@ module.exports = function(passport){
     });
     
     router.post('/changeInfo',function(req, res, username){ 
-        User.findOne({'local.username': req.body.username}, function(err, user){
+        User.findOne({'username': req.body.username}, function(err, user){
             var variable = req.body.infoChange;
             if(err)
                 throw err;
             if(user){
                 if(variable=='firstName')
-                    user.local.firstName = req.body.change;
+                    user.firstName = req.body.change;
                 else if(variable=='lastName')
-                    user.local.lastName = req.body.change;
+                    user.lastName = req.body.change;
                 else if(variable=='email')
-                    user.local.email = req.body.change;
+                    user.email = req.body.change;
                 user.save(function(err) {
                   if (err) throw err;
                 });
@@ -92,7 +92,7 @@ module.exports = function(passport){
     });
 
     router.post('/deleteUser',function(req, res, username){ 
-        User.findOne({'local.username': req.body.username}, function(err, user){
+        User.findOne({'username': req.body.username}, function(err, user){
             var variable = req.body.infoChange;
             if(err)
                 throw err;
@@ -149,13 +149,14 @@ module.exports = function(passport){
 	});
     
     router.get('/facebook', passport.authenticate('facebook', { 
-        scope : ['email', 'user_birthday']
+        scope : ['email']
     }));
     
     router.get('/facebook/callback',passport.authenticate('facebook', {
             successRedirect : '/profile',
             failureRedirect : '/'
     }));
+    
     router.post('/addbook', upload.single('mypic'), function(req,res){
     //add book
        

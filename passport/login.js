@@ -9,7 +9,7 @@ module.exports = function(passport){
         },
         function(req, username, password, done) { 
             // check in mongo if a user with username exists or not
-            User.findOne({ 'local.username' :  username }, 
+            User.findOne({ 'username' :  username }, 
                 function(err, user) {
                     // In case of any error, return using the done method
                     if (err)
@@ -35,7 +35,7 @@ module.exports = function(passport){
 
 
     var isValidPassword = function(user, password){
-        return bCrypt.compareSync(password, user.local.password);
+        return bCrypt.compareSync(password, user.password);
     }
     
 }

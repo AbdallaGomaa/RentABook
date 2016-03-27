@@ -11,8 +11,9 @@ $(document).ready(function(){
             var result = JSON.parse(index);
             $.each(result.book, function(x, field){
                 $("#printbooks").append("<div class=\"col-md-2\">"+
-            "<div style=\"background-image: url(../img/TBB.jpg);\" class=\"thumbnail\">"+
-              "<img src=\"uploads/"+ field.photolink+"\" width=\"100\" height=\"100\">"+
+            "<div style=\"background-image: url(../img/TBB.jpg);width:150px; height:300px;\" class=\"thumbnail\">"+
+            "<div style=\"width:100px; height:120px;margin:0 auto;\">"+
+              "<img src=\"uploads/"+ field.photolink+"\" width=\"100px\" height=\"110px\"></div>"+
               "<div class=\"caption\">"+
                 "<h4>"+field.title+"</h4>"+
                 "<p>"+field.author+"</p>"+

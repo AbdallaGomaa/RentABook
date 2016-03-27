@@ -10,6 +10,7 @@ var mongoose = require("mongoose");
 var multer  = require('multer');
 var Grid = require('gridfs-stream');
 var uid = require('uid2');
+var mime = require('mime');
  
 
 var TARGET_PATH = 'views/uploads';
@@ -21,7 +22,7 @@ var createHash = function(password){
 
 Grid.mongo = mongoose.mongo;
  
-var upload = multer({ dest: '../views/uploads/' })
+var upload = multer({ dest: 'views/uploads/temp' })
 
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
@@ -170,8 +171,7 @@ module.exports = function(passport){
             //get the mime type of the file
             var type = req.file.mimetype;
             //get the extension of the file
-            var extension="jpeg";
-            console.log(extension);
+            var extension=mime.extension(type);
 
             //check to see if we support the file type
             if (IMAGE_TYPES.indexOf(type) == -1) {

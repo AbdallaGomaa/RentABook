@@ -16,12 +16,14 @@ $(document).ready(function(){
 				  "<div class=\"caption\">"+
 					"<h4>"+field.title+"</h4>"+
 					"<p>"+field.author+"</p>"+
-					"<p><a href=\"BookInfo.html\" class=\"btn btn-primary\" role=\"button\">Rent</a> <a href=\"BookInfo.html\" class=\"btn btn-default\" role=\"button\">View</a></p>"+
+                    "<p>"+field.genre+"</p>"+
+					"<p><a href=\"BookInfo.html\" class=\"btn btn-primary\" role=\"button\">Rent</a> <a href=\"/BookInfo?book="+field.id+"\" class=\"btn btn-default\" role=\"button\">View</a></p>"+
 				  "</div>"+
 				"</div>");
                     //$("#printbooks").append("Title: "+field.title +"<br>" + "Author: "+ field.author +"<br>" +"Price: "+ field.price +"<br>" + "Photo: <img src=\"uploads/"+ field.photolink+"\" \"><br><br>");
                     //$("#printbooks").append("<li class= list-group-item>"+"Title: "+field.title +"<br>" + "Author: "+ field.author +"<br>" +"Price: "+ field.price +"<br>" + "Link: "+ field.photolink "</li>"); 
                     $("#bookcount").empty();
+                    //href="/BookInfo?book="+field"
                     $("#bookcount").append(result.book.length);
                 });
             }

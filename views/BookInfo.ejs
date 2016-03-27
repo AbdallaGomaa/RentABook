@@ -63,14 +63,14 @@
 				<table class="table table-bordered">
 					<tbody>
 						<tr>
-							<td rowspan="8"><img src="img/HarryP.jpg"></td>
+							<td rowspan="8"><img src="./uploads/<%= book.photolink %>"></td>
 							<td>Book Title</td>
-							<td>Harry Potter</td>
+							<td><%= book.title %></td>
 							<td>Contact Renter</td>
 						</tr>
 						<tr>
 							<td>Author</td>
-							<td>J.K. Rowling</td>
+							<td><%= book.author %></td>
 							<td rowspan="7">
 								<form>
 									<textarea rows="10" cols="50" placeholder="Enter message here...."></textarea>
@@ -87,23 +87,23 @@
 						</tr>
 						<tr>
 							<td>Genres</td>
-							<td>Fiction</td>
+							<td><%= book.genre %></td>
 						</tr>
 						<tr>
 							<td>Language</td>
-							<td>English</td>
+							<td><%= book.language %></td>
 						</tr>
 						<tr>
-							<td>MPAA Rating</td>
-							<td>PG-13</td>
+							<td>Publisher</td>
+							<td><%= book.publisher %></td>
 						</tr>
 						<tr>
 							<td>Price</td>
-							<td>$5 per week</td>
+							<td>$<%= book.price %></td>
 						</tr>
 						<tr>
 							<td>Renter</td>
-							<td>Aser Eldamaty</td>
+							<td><%=book.user %></td>
 						</tr>
 						<tr>
 							<td>Description</td>

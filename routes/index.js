@@ -159,59 +159,63 @@ module.exports = function(passport){
     
     router.post('/addbook', upload.single('mypic'), function(req,res){
     //add book
-       
-        var is;
-        var os;
-        var targetPath;
-        var targetName;
-        var tempPath = req.file.path;
-        //get the mime type of the file
-        var type = req.file.mimetype;
-        //get the extension of the file
-        var extension="jpeg";
-        console.log(extension);
+       if(req.file!=undefined){
+            var is;
+            var os;
+            var targetPath;
+            var targetName;
+            var tempPath = req.file.path;
+            //get the mime type of the file
+            var type = req.file.mimetype;
+            //get the extension of the file
+            var extension="jpeg";
+            console.log(extension);
 
-        //check to see if we support the file type
-        if (IMAGE_TYPES.indexOf(type) == -1) {
-          res.send(415, 'Supported image formats: jpeg, jpg, jpe, png.');
-        }
-
-        //create a new name for the image
-        targetName = uid(22) + '.' + extension;
-        console.log("targetName: "+targetName);
-        //determine the new path to save the image
-        targetPath = path.join(TARGET_PATH, targetName);
-        console.log("targetPath: "+targetPath);
-        //create a read stream in order to read the file
-        is = fs.createReadStream(tempPath);
-
-        //create a write stream in order to write the a new file
-        os = fs.createWriteStream(targetPath);
-
-        is.pipe(os);
-
-
-        //handle error
-        is.on('error', function() {
-          if (err) {
-            res.send(500, 'Something went wrong');
-          }
-        });
-        //if we are done moving the file
-        is.on('end', function() {
-
-
-          //delete file from temp folder
-          fs.unlink(tempPath, function(err) {
-            if (err) {
-              res.send(500, 'Something went wrong');
+            //check to see if we support the file type
+            if (IMAGE_TYPES.indexOf(type) == -1) {
+              res.send(415, 'Supported image formats: jpeg, jpg, jpe, png.');
             }
 
-            //send something nice to user
+            //create a new name for the image
+            targetName = uid(22) + '.' + extension;
+            console.log("targetName: "+targetName);
+            //determine the new path to save the image
+            targetPath = path.join(TARGET_PATH, targetName);
+            console.log("targetPath: "+targetPath);
+            //create a read stream in order to read the file
+            is = fs.createReadStream(tempPath);
+
+            //create a write stream in order to write the a new file
+            os = fs.createWriteStream(targetPath);
+
+            is.pipe(os);
 
 
-          });
-        });
+            //handle error
+            is.on('error', function() {
+              if (err) {
+                res.send(500, 'Something went wrong');
+              }
+            });
+            //if we are done moving the file
+            is.on('end', function() {
+
+
+              //delete file from temp folder
+              fs.unlink(tempPath, function(err) {
+                if (err) {
+                  res.send(500, 'Something went wrong');
+                }
+
+                //send something nice to user
+
+
+              });
+            });
+       }
+    else {
+        var targetname="";
+    }
     addBook = function(){
          
         
@@ -224,8 +228,12 @@ module.exports = function(passport){
                         newbook.title = req.param('booktitle');
                         newbook.author = req.param('bookauthor');
                         newbook.price = req.param('bookcost');
+                        newbook.genre = req.param('genre');
+                        newbook.language = req.param('language');
+                        newbook.publisher = req.param('publisher');
                         newbook.photolink = targetName;
-                        newbook.user = req.user;
+                        console.log(req.user.username);
+                        newbook.user = req.user.username;
                             newbook.save(function(err) {
                             if (err){
                                 console.log('Error in Saving book: '+err);  
@@ -249,11 +257,15 @@ module.exports = function(passport){
                 throw err;
         
             for (i in users){
-                if(req.user==users[i].user){
+                if(req.user.username==users[i].user){
                 
-                    var bookObj = {"title": users[i].title, 
+                    var bookObj = {"id": users[i]._id,
+                                    "title": users[i].title, 
                                     "author": users[i].author, 
                                     "price":users[i].price,
+                                    "genre":users[i].genre,
+                                    "language":users[i].language,
+                                    "publisher":users[i].publisher,
                                     "photolink":users[i].photolink
                                     };
                     
@@ -268,6 +280,16 @@ module.exports = function(passport){
             res.write(JSON.stringify(returnOBJ, null, 2));
             res.end();
        
+        });
+    });
+    
+    router.get('/BookInfo', function(req, res){
+        Book.findOne({'_id': req.param('book')}, function(err, book){
+            if(err)
+                throw err;
+            if(book){
+               res.render('BookInfo',{book: book});    
+            }
         });
     });
     

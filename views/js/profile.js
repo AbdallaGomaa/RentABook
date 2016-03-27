@@ -30,30 +30,70 @@ $(document).ready(function(){
         }
     });
 
-    $("#myMessages").click(function(){
-        $("#printMessages").empty();
+    //$("#myMessages").click(function(){
+        //$("#printMessages").empty();
         $.ajax({
             url: '/myMessages',
             //success function is whats returned by the server
             // parse through json returned and print out the field in html
             success: function success(index){
-                $("#printMessages").empty();
+                //$("#printMessages").empty();
                 var result = JSON.parse(index);
                 //alert("Returned successfully");
-                 $.each(result.messages, function(x, field){
+                 //$.each(result.messages, function(x, field){
+                 $.each(result.messages.reverse(), function(x, field){
+                     var timestamp = field._id.toString().substring(0,8);
+                     var date = new Date( parseInt( timestamp, 16 ) * 1000 );
+                     var useDate = date.toDateString() + " " + date.toLocaleTimeString();
                     $("#pMsg").append("<div class=\"panel-heading\">" +
                           "<h4 class=\"panel-title\">" +
-                            "<a data-toggle=\"collapse\" href=\"#" + field._id + "\">" + field.from + "</a>" +
+                            "<a data-toggle=\"collapse\" href=\"#" + field._id + "\">FROM: " + field.from + "           DATE: " + useDate + "</a>" +
                           "</h4>" +
                         "</div>" + 
                         "<div id=\"" + field._id + "\" class=\"panel-collapse collapse\">" +
                           "<div class=\"panel-body\"><font color = \"black\">" + field.theMessage + "</font></div>" +
                           "<div class=\"panel-footer\">" +
-                              "<button type=\"button\" class=\"btn btn-primary\" id = \"" + field.from + "\">Reply</button>" +
-                              "<button type=\"button\" class=\"btn btn-danger\" id = \"" + field._id + "\">Delete</button>" +
+                              "<form class=\"form-horizontal\" role=\"form\" action=\"/sendMessage\" method=\"POST\">" +
+                                      "<div class=\"form-group\">" +
+                                       // "<label class=\"control-label col-sm-2\" for=\"to\">To</label>" +
+                                        //"<div class=\"col-sm-10\">" +
+                                          "<input type=\"hidden\" class=\"form-control\" id=\"to\" value = \"" + field.from + "\"  name=\"to\" placeholder=\"Enter username you would like to send to\">" +
+                                        //"</div>" +
                                       "</div>" +
+                                      "<div class=\"form-group\">" +
+                                       // "<label class=\"control-label col-sm-2\" for=\"message\">Message</label>" +
+                                        "<div class=\"col-sm-10\">" + 
+                                          "<textarea type=\"text\" rows = \"5\" class=\"form-control\" id=\"message\" name=\"message\">" +
+                                        "&#13;&#10;&#13;&#10; --Old Message--------- &#13;&#10;" + field.theMessage +
+                                        "</textarea>" +
+                                        "</div>" +
+                                      "</div>" +
+                                      //"<div class=\"form-group\">" + 
+                                       //"<div class=\"col-sm-offset-2 col-sm-10\">" + 
+                                            "<button type=\"submit\" class=\"btn btn-primary\">Reply</button>" +
+                                       // "</div>" +
+                                      //"</div>" +
+                            "</form>" +
+                              //"<button type=\"button\" class=\"btn btn-primary\" id = \"" + field.from + "\">Reply</button>" +
+                                      "<form class=\"form-horizontal\" role=\"form\" action=\"/delMessage\" method=\"POST\">" +
+                                      "<div class=\"form-group\">" +
+                                       // "<label class=\"control-label col-sm-2\" for=\"to\">To</label>" +
+                                        "<div class=\"col-sm-10\">" +
+                                          "<input type=\"hidden\" class=\"form-control\" id=\"to\" value = \"" + field._id + "\"  name=\"id\" placeholder=\"Enter username you would like to send to\">" +
+                                        "</div>" +
+                                      "</div>" +
+                                      //"<div class=\"form-group\">" + 
+                                       //"<div class=\"col-sm-offset-2 col-sm-10\">" + 
+                                            "<button type=\"submit\" class=\"btn btn-danger\">Delete</button>" +
+                                        //"</div>" +
+                                      //"</div>" +
+                            "</form>" +
+                             // "<button type=\"button\" class=\"btn btn-danger\" id = \"" + field._id + "\">Delete</button>" +
+                               //       "</div>" +
                         "</div>");
                 });
+                $("#numMessages").empty();
+                $("#numMessages").append(result.messages.length);
                 /*$.each(result.messages, function(x, field){
                     $("#printMessages").append("From: "+field.from +"<br>" +"Message: "+ field.theMessage + "<br><br>");
                     //$("#printbooks").append("<li class= list-group-item>"+"Title: "+field.title +"<br>" + "Author: "+ field.author +"<br>" +"Price: "+ field.price +"<br>" + "Link: "+ field.photolink "</li>"); 
@@ -63,5 +103,5 @@ $(document).ready(function(){
             }
         });
 
-    });
+    //});
 }); 

@@ -11,6 +11,7 @@ var multer  = require('multer');
 var Grid = require('gridfs-stream');
 var uid = require('uid2');
 var mime = require('mime');
+var mongodb = mongoose.Schema;
  
 
 var TARGET_PATH = 'views/uploads';
@@ -363,6 +364,26 @@ module.exports = function(passport){
         process.nextTick(sendMess);
         
         res.redirect('/');
+        
+    });
+    
+    /* Delete Message */
+    router.post('/delMessage', function(req,res){
+    //send message
+        Message.findOne({'_id': req.param('id')}, function(err, msg){
+            if(err)
+                throw err;
+            if(msg){
+                  msg.remove(function(err) {
+                  if (err) throw err;
+                  });
+                  console.log('msg Deleted')
+            }
+            else
+                console.log('msg not found');
+        });
+        
+        res.redirect('/profile');
         
     });
     

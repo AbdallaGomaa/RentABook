@@ -1,0 +1,21 @@
+<% for(i in user.reviews) {%>
+    <div class="row">
+        <div class="col-md-1">User: </div>
+        <div class="col-md-11"><%=user.reviews[i].ratingUser%></div>
+        <br />
+        <div class="col-md-1">Rating: </div>
+        <div class="col-md-11"> 
+            <div class="stars">
+                <label class="star-1" for="star-1">1</label>
+                <label class="star-2" for="star-2">2</label>
+                <label class="star-3" for="star-3">3</label>
+                <label class="star-4" for="star-4">4</label>
+                <label class="star-5" for="star-5">5</label>
+                <span id="limitingSpan" style="width:<%=user.reviews[i].rating*20%>%;"></span>
+            </div>
+        </div>
+        <div class="col-md-1">Review: </div>
+        <div class="col-md-11"><%=user.reviews[i].review%></div>
+    </div>
+    <hr />
+<% } %>

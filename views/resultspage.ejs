@@ -5,55 +5,45 @@
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.css">
 		<link type="text/css" rel="stylesheet" href="css/resultspage.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-		<script src="bootstrap.js" type="text/javascript"></script>
+		<script src="js/bootstrap.js" type="text/javascript"></script>
     </head>
     
     <body>
 		<header>
-           <% include js/navbars %>
+           <% include ./navbars %>
         </header>
 
         <div class="spacer">
 		    &nbsp;
 		</div>
-        <div class="well well-sm">Page 1 of 1 for "Best Books" Results</div>
-
+        <% if(genre==false){ %>
+            <div class="well well-sm">Page 1 of 1 for "<%= search %>" Results</div>
+        <% }else { %>
+            <div class="well well-sm">Page 1 of 1 for "<%= genreN %>" Results</div>
+        <% } %>
         <div class="row">
-            <div class="col-md-2">
-                <div class="sidebar"> 
-                    <ul>
-                        <li>Categories</li>
-                        <li>Recent Searches</li>
-                        <li>Categories</li>
-                        <li>Recent Searches</li>
-                        <li>Categories</li>
-                        <li>Recent Searches</li>
-                        <li>Categories</li>
-                        <li>Recent Searches</li>
-                    </ul>
+                <% if(genre==false){ %>
+                <div class="sidebar col-md-1">
+                   <ul id="verticalNav" class="nav nav-pills nav-stacked " >
+                        <li <%if(catv=='all'){%>class="active"<%}%>><a href="/search?cat=all&name=<%= search %>">All</a></li>
+                        <% for(var i=0; i<cat.length; i++) {%>
+                            <li <%if(catv==cat[i]){%>class="active"<%}%>><a href="/search?cat=<%= cat[i] %>&name=<%= search %>"><%= cat[i] %></a></li> 
+                        <% } %> 
+				   </ul> 
                 </div>
-            </div>
-            <div class="col-md-10">
+                <% } %>
+            <div class="col-md-9">
                 <div class="center">
                     <div class="list-group" id="swag">
-                        <a href="#" class="list-group-item">
-                            <div class = "book"> 
-                                <img src="img/book1.jpg" class="img-rounded" alt="Cinque Terre" width="200" height="300">
-                                <p3>Author: Harper Lee</p3>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <div class = "book"> 
-                                 <img src="img/book2.jpg" class="img-rounded" alt="Cinque Terre" width="200" height="300">
-                                 <p3> Author: Scott Fitzgerald </p3>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <div class = "book"> 
-                                 <img src="img/book3.jpg" class="img-rounded" alt="Cinque Terre" width="200" height="300">
-                                 <p3> Author: Suzanne Collins </p3>
-                            </div>
-                        </a>
+                        <% for(var i=0; i<books.length; i++) {%>
+                            <a href="/bookInfo?book=<%= books[i].id %>" class="list-group-item"> 
+                                <div class = "book"> 
+                                    <img src="./uploads/<%= books[i].photolink %>" class="img-rounded" alt="Cinque Terre" width="200" height="300">
+                                    <p3>Author: <%= books[i].author %></p3>
+                                </div>
+                            </a> 
+                        <% } %>
+                                
                     </div>
                 </div>
                 <button class="btn" id="prev">Prev</button>

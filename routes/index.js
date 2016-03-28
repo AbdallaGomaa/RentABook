@@ -25,6 +25,7 @@ Grid.mongo = mongoose.mongo;
  
 var upload = multer({ dest: 'views/uploads/temp' })
 
+
 var isAuthenticated = function (req, res, next) {
 	// if user is authenticated in the session, call the next() to call the next request handler 
 	// Passport adds this method to request object. A middleware is allowed to add properties to
@@ -41,10 +42,28 @@ module.exports = function(passport){
 	/* GET login page. */
 	router.get('/', function(req, res) {
     	// Display the Login page with any flash message, if any
-		if(req.isAuthenticated())
-            res.render('index', {state: 'loggedIn' });
-        else
-            res.render('index', {state: 'loggedOut' });
+        var allbooks = [];
+        Book.find({}, function(err, books){
+            if(err)
+                throw err;
+        
+            for (i in books){
+                var bookObj = {"id": books[i]._id,
+                                "title": books[i].title, 
+                                "author": books[i].author, 
+                                "price":books[i].price,
+                                "genre":books[i].genre,
+                                "language":books[i].language,
+                                "publisher":books[i].publisher,
+                                "photolink":books[i].photolink
+                                };
+                allbooks.push(bookObj);
+            }
+            if(req.isAuthenticated())
+                res.render('index', {state: 'loggedIn', books: allbooks });
+            else
+                res.render('index', {state: 'loggedOut', books: allbooks });
+        });
 	});	
     
     router.get('/admin', function(req, res) {
@@ -335,6 +354,70 @@ module.exports = function(passport){
          });
         res.redirect('/user?username='+req.param('username'));
     });
+    
+    router.get('/search', function(req, res){
+        var searchRes = [];
+        var cat = [];
+        var genre = false;
+        var genreN = " ";
+        Book.find({}, function(err, books){
+            if(err)
+                throw err;
+            console.log(req.param('name'));
+        
+            if(req.param('genre')==undefined){
+                for (i in books){
+                    if(req.param('name').toLowerCase()==books[i].title.toLowerCase() || req.param('name').toLowerCase()==books[i].author.toLowerCase()){
+
+                        var bookObj = {"id": books[i]._id,
+                                        "title": books[i].title, 
+                                        "author": books[i].author, 
+                                        "price":books[i].price,
+                                        "genre":books[i].genre,
+                                        "language":books[i].language,
+                                        "publisher":books[i].publisher,
+                                        "photolink":books[i].photolink
+                                        };
+
+                        if(cat.indexOf(bookObj.genre)==-1)
+                            cat.push(bookObj.genre);
+                        if(req.param('cat')=='all' || req.param('cat')==undefined)
+                            searchRes.push(bookObj);
+                        else if(bookObj.genre == req.param('cat'))
+                            searchRes.push(bookObj);
+
+                    }
+                }
+            }
+            else{
+                genre = true;
+                genreN = req.param('genre');
+                for (i in books){
+                    if(req.param('genre')==books[i].genre){
+
+                        var bookObj = {"id": books[i]._id,
+                                        "title": books[i].title, 
+                                        "author": books[i].author, 
+                                        "price":books[i].price,
+                                        "genre":books[i].genre,
+                                        "language":books[i].language,
+                                        "publisher":books[i].publisher,
+                                        "photolink":books[i].photolink
+                                        };
+                        if(cat.indexOf(bookObj.genre)==-1)
+                            cat.push(bookObj.genre);
+                        searchRes.push(bookObj);
+
+                    }
+                }                    
+            }
+            if(req.isAuthenticated())
+                res.render('resultspage',{books: searchRes, state:'loggedIn', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN});
+            else
+                res.render('resultspage',{books: searchRes, state:'loggedOut', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN});
+       });
+    });
+    
     
 	/* Handle Logout */
 	router.get('/signout', function(req, res) {

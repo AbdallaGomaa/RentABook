@@ -9,23 +9,23 @@
 					Search by Genre <span class="caret"></span>
 				  </button>
 				  <ul class="dropdown-menu">
-					<li><a href="#">Action</a></li>
-					<li><a href="#">Comedy</a></li>
-					<li><a href="#">Fantasy</a></li>
-					<li><a href="#">Fiction</a></li>
-					<li><a href="#">Mystery</a></li>
-					<li><a href="#">Romance</a></li>
-					<li><a href="#">Science Fiction</a></li>
-					<li><a href="#">Thriller</a></li>
+					<li><a href="/search?genre=Action">Action</a></li>
+					<li><a href="/search?genre=Comedy">Comedy</a></li>
+					<li><a href="/search?genre=Fantasy">Fantasy</a></li>
+					<li><a href="/search?genre=Fiction">Fiction</a></li>
+					<li><a href="/search?genre=Mystery">Mystery</a></li>
+					<li><a href="/search?genre=Romance">Romance</a></li>
+					<li><a href="/search?genre=Science Fiction">Science Fiction</a></li>
+					<li><a href="/search?genre=Thriller">Thriller</a></li>
 				  </ul>
 				</div>
 				
-				<form class="navbar-form" role="search" style="float:left">
+				<form class="navbar-form" role="search" style="float:left" action="/search" method="GET">
 				  <div class="form-group">
-					<input type="text" class="form-control" size="50" placeholder="Enter Book Title or Author's Name">
+					<input type="text" class="form-control" size="50" name="name" placeholder="Enter Book Title or Author's Name">
 				  </div>
 				  
-				  <button type="button" class="btn btn-default" onclick="location.href='resultspage.html';">
+				  <button type="submit" class="btn btn-default">
 					<span class="glyphicon glyphicon-search"></span>Search
 				  </button>
 				</form>

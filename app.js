@@ -1,3 +1,4 @@
+var compress = require('compression');	
 var express = require('express');
 var path = require('path');
 var favicon = require('static-favicon');
@@ -11,6 +12,7 @@ var mongoose = require('mongoose');
 mongoose.connect(dbConfig.url);
 
 var app = express();
+app.use(compress());
 
 // view engine setup
 //app.set('views', path.join(__dirname, 'views'));
@@ -23,7 +25,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), {maxAge: 8640000}));
 
 // Configuring Passport
 var passport = require('passport');
@@ -65,3 +67,4 @@ if (app.get('env') === 'development') {
 }
 
 module.exports = app;
+    

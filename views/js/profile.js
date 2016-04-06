@@ -2,6 +2,19 @@ var totalLength = 0;
 $(document).ready(function(){
     //$("#mybookbutton").click(function(){
     
+    $("#passbutton").click(function(){
+        $("#passdata").toggle();
+    });
+    $("#fNameButton").click(function(){
+        $("#fNameData").toggle();
+    });
+    $("#lNameButton").click(function(){
+        $("#lNameData").toggle();
+    });
+    $("#emailButton").click(function(){
+        $("#emailData").toggle();
+    });
+
     $("#printbooks").empty();
     $.ajax({
         url: '/mybooks',
@@ -19,7 +32,7 @@ $(document).ready(function(){
                 "<h4>"+field.title+"</h4>"+
                 "<p>"+field.author+"</p>"+
                 "<p>"+field.genre+"</p>"+
-                "<p><a href=\"BookInfo.html\" class=\"btn btn-primary\" role=\"button\">Rent</a> <a href=\"/BookInfo?book="+field.id+"\" class=\"btn btn-default\" role=\"button\">View</a></p>"+
+                "<p><a href=\"/deleteBook?bookid="+field.id+"\" id=\"deleteButton\"class=\"btn btn-danger\" role=\"button\">Delete</a><a href=\"/BookInfo?book="+field.id+"\" class=\"btn btn-default\" role=\"button\">View</a></p>"+
               "</div>"+
             "</div>");
                 //$("#printbooks").append("Title: "+field.title +"<br>" + "Author: "+ field.author +"<br>" +"Price: "+ field.price +"<br>" + "Photo: <img src=\"uploads/"+ field.photolink+"\" \"><br><br>");

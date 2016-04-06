@@ -23,6 +23,15 @@ textarea{
     width: 100%;
     height: 65px;
 }
+.edit{
+    background-color:transparent ; 
+    color:white;
+}
+/*
+.btn btn-default:hover{
+    background-color:lightcyan; 
+    color:white;
+}*/
 
 a{
   padding: 2px 0px;

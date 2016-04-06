@@ -37,10 +37,16 @@ body{
 }
 
 .thumbnail{
-	//background: transparent;
+	background: transparent;
 	background-image: url(../img/TBB.jpg);
+    width:150px; 
+    height:250px;
 }
-
+.area{
+    width:100px; 
+    height:120px;
+    margin:0 auto;
+}
 .row{
 	background-image: url(../img/Background.png);
 }

@@ -256,7 +256,9 @@ module.exports = function(passport){
                 console.log(variable+' Changed');
             }
             else
+                console.log(req.body);
                 console.log('user not found');
+                
          });
         res.redirect('/');
     });
@@ -468,6 +470,7 @@ module.exports = function(passport){
                         newbook.genre = req.param('genre');
                         newbook.language = req.param('language');
                         newbook.publisher = req.param('publisher');
+                        newbook.description = req.param('description');
                         newbook.photolink = targetName;
                         console.log(req.user.username);
                         newbook.user = req.user.username;
@@ -503,6 +506,7 @@ module.exports = function(passport){
                                     "genre":users[i].genre,
                                     "language":users[i].language,
                                     "publisher":users[i].publisher,
+                                    "description":users[i].description,
                                     "photolink":users[i].photolink
                                     };
                     
@@ -575,7 +579,7 @@ module.exports = function(passport){
                     });
                     console.log(recommendedBooks);
                    if(req.isAuthenticated())
-                        res.render('BookInfo',{book: book, recommendedBooks: recommendedBooks, state:'loggedIn'});  
+                        res.render('BookInfo',{book: book, user:req.user, recommendedBooks: recommendedBooks, state:'loggedIn'});  
                    else
                         res.render('BookInfo',{book: book, recommendedBooks: recommendedBooks, state:'loggedOut'});  
                 });
@@ -699,6 +703,7 @@ module.exports = function(passport){
                                         "genre":books[i].genre,
                                         "language":books[i].language,
                                         "publisher":books[i].publisher,
+                                        "description":books[i].description,
                                         "photolink":books[i].photolink
                                         };
                         if(cat.indexOf(bookObj.genre)==-1)
@@ -799,7 +804,7 @@ module.exports = function(passport){
                     //console.log(users[i].title);
                 
                     //console.log(JSON.stringify(returnedJSON, null, 2));
-                    console.log(msgs[i]._id + msgs[i].from + msgs[i].to + msgs[i].theMessage);
+                    //console.log(msgs[i]._id + msgs[i].from + msgs[i].to + msgs[i].theMessage);
                     var msgObject = {
                                     "_id": msgs[i]._id,
                                     "from": msgs[i].from, 
@@ -813,11 +818,80 @@ module.exports = function(passport){
             }
              var returnOBJ = {"code":200, 
                                 "messages":messages};
-            console.log(JSON.stringify(returnOBJ, null, 2));
+            //console.log(JSON.stringify(returnOBJ, null, 2));
             res.write(JSON.stringify(returnOBJ, null, 2));
             res.end();
        
         });
     });
+    router.post('/changePass2',function(req, res){ 
+        User.findOne({'username': req.user.username}, function(err, user){
+            if(err)
+                throw err;
+            if(user){
+                if(bCrypt.compareSync(req.body.oldpassword, user.password)){
+                    user.password = createHash(req.body.newpass);
+                    user.save(function(err) {
+                        if (err) throw err;
+                    });
+                    console.log('password changed');
+                }
+                else
+                    console.log('password incorrect');   
+            }
+            else
+                console.log('user not found');
+         });
+        res.redirect('/profile');
+    });
+    router.post('/changeBookInfo',function(req, res){ 
+        Book.findOne({'_id': req.body.bookid}, function(err,book){
+            var variable = req.body.infoChange;
+            if(err)
+                throw err;
+            if(book){
+                if(variable=='title')
+                    book.title = req.body.change;
+                else if(variable=='genre')
+                    book.genre = req.body.change;
+                else if(variable=='language')
+                    book.language = req.body.change;
+                else if(variable=='author')
+                    book.author = req.body.change;
+                else if(variable=='publisher')
+                    book.publisher = req.body.change;
+                else if(variable=='price')
+                    book.price = req.body.change;
+                book.save(function(err) {
+                  if (err) throw err;
+                });
+                }
+
+            else
+                console.log('book not found');
+         });
+        var bookreturn='/bookInfo?book='+req.body.bookid;
+        res.redirect(bookreturn);
+    });
+    router.get('/deleteBook',function(req, res){ 
+        
+        Book.findOne({'_id': req.param('bookid')}, function(err,book){
+            if(book){
+                book.remove(function(err) {
+                  if (err) throw err;
+                  });
+                console.log('\n\n\n\n\n\n');
+                  console.log('Book Deleted');
+            console.log('\n\n\n\n\n\n');}
+            else{
+                console.log('Book not found');
+                console.log('\n\n\n\n\n\n');
+                console.log(req.param('bookid'));
+                console.log('\n\n\n\n\n\n');
+            }
+        });
+        res.redirect('/profile');
+    });
+    
 	return router;
 }

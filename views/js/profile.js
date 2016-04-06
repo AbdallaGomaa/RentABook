@@ -13,7 +13,7 @@ $(document).ready(function(){
                 $("#printbooks").append("<div class=\"col-md-2\">"+
             "<div style=\"background-image: url(../img/TBB.jpg);width:150px; height:300px;\" class=\"thumbnail\">"+
             "<div style=\"width:100px; height:120px;margin:0 auto;\">"+
-              "<img src=\"uploads/"+ field.photolink+"\" width=\"100px\" height=\"110px\"></div>"+
+              "<img src=\""+ field.photolink+"\" width=\"100px\" height=\"110px\"></div>"+
               "<div class=\"caption\">"+
                 "<h4>"+field.title+"</h4>"+
                 "<p>"+field.author+"</p>"+

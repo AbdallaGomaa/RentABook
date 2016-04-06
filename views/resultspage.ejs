@@ -38,7 +38,7 @@
                         <% for(var i=0; i<books.length; i++) {%>
                             <a href="/bookInfo?book=<%= books[i].id %>" class="list-group-item"> 
                                 <div class = "book"> 
-                                    <img src="./uploads/<%= books[i].photolink %>" class="img-rounded" alt="Cinque Terre" width="200" height="300">
+                                    <img src="<%= books[i].photolink %>" class="img-rounded" alt="Cinque Terre" width="200" height="300">
                                     <p3>Author: <%= books[i].author %></p3>
                                 </div>
                             </a> 

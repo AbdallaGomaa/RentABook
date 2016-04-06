@@ -12,7 +12,15 @@ var Grid = require('gridfs-stream');
 var uid = require('uid2');
 var mime = require('mime');
 var mongodb = mongoose.Schema;
+var S3FS = require('s3fs');
+var multiparty = require('connect-multiparty');
+var multipartyMiddleware = multiparty();
+var s3fsImpl = new S3FS('rentabookk', {
+    accessKeyId: 'AKIAIGCDRNF4OS4JWIKQ',
+    secretAccessKey: '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'
+});
  
+s3fsImpl.create();
 
 var TARGET_PATH = 'views/uploads';
 var IMAGE_TYPES = ['image/jpeg', 'image/png'];  
@@ -39,6 +47,8 @@ var isAuthenticated = function (req, res, next) {
 
 module.exports = function(passport){
 
+    
+    router.use(multipartyMiddleware);
 	/* GET login page. */
 	router.get('/', function(req, res) {
     	// Display the Login page with any flash message, if any
@@ -195,6 +205,59 @@ module.exports = function(passport){
             failureRedirect : '/'
     }));
     
+    router.post('/addbook', function(req,res){
+        var file = req.files.mypic;
+
+        var stream = fs.createReadStream(file.path);
+        
+        var type = file.type;
+        console.log("\n\n\n\n\n\n\n\n\n\n\n");
+        console.log(type);
+        console.log("\n\n\n\n\n\n\n\n\n\n\n");
+        //get the extension of the file
+        var extension=mime.extension(type);
+
+        //check to see if we support the file type
+        if (IMAGE_TYPES.indexOf(type) == -1) {
+          res.send(415, 'Supported image formats: jpeg, jpg, jpe, png.');
+        }
+
+        //create a new name for the image
+        targetName = uid(22) + '.' + extension;
+        return s3fsImpl.writeFile(targetName, stream).then(function(){
+            fs.unlink(file.path, function(err){
+                if(err)
+                    console.errror(err);
+            })
+            addBook = function(){
+  
+                var newbook = new Book();
+                    // set the user's local credentials
+                    newbook.title = req.param('booktitle');
+                    newbook.author = req.param('bookauthor');
+                    newbook.price = req.param('bookcost');
+                    newbook.genre = req.param('genre');
+                    newbook.language = req.param('language');
+                    newbook.publisher = req.param('publisher');
+                    newbook.photolink = "https://s3.amazonaws.com/rentabookk/"+targetName;
+                    console.log(req.user.username);
+                    newbook.user = req.user.username;
+                        newbook.save(function(err) {
+                        if (err){
+                            console.log('Error in Saving book: '+err);  
+                            throw err;  
+                        }
+                        console.log('Book Registration succesful');    
+                        });
+            }
+            // Delay the execution of addbook and execute the method
+            process.nextTick(addBook);
+
+            res.redirect('/profile');
+        });
+    });
+    
+    /*
     router.post('/addbook', upload.single('mypic'), function(req,res){
     //router.post('/addbook', function(req,res){
     //add book
@@ -285,7 +348,7 @@ module.exports = function(passport){
         
         res.redirect('/profile');
         
-    });
+    });*/
     
     router.get('/mybooks', function(req, res){
         var books = [];

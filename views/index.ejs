@@ -29,7 +29,7 @@
           <% for(var i=0; i<books.length; i++) {%>
 			  <div class="col-md-2">
 				<div class="thumbnail">
-				  <img src="./uploads/<%= books[i].photolink %>" width="100" height="100">
+				  <img src="<%= books[i].photolink %>" width="100" height="100">
 				  <div class="caption">
 					<h4><%= books[i].title %></h4>
 					<p><%= books[i].genre %></p>
@@ -46,7 +46,7 @@
           <% for(var i=0; i<books.length; i++) {%>
 			  <div class="col-md-2">
 				<div class="thumbnail">
-				  <img src="./uploads/<%= books[i].photolink %>" width="100" height="100">
+				  <img src="<%= books[i].photolink %>" width="100" height="100">
 				  <div class="caption">
 					<h4><%= books[i].title %></h4>
 					<p><%= books[i].genre %></p>

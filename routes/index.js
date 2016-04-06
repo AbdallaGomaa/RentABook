@@ -463,7 +463,7 @@ module.exports = function(passport){
         // Delay the execution of findOrCreateUser and execute the method
         process.nextTick(sendMess);
         
-        res.redirect('/');
+        res.redirect('/profile');
         
     });
     

@@ -32,12 +32,17 @@ $(document).ready(function(){
 
     //$("#myMessages").click(function(){
         //$("#printMessages").empty();
-        $.ajax({
+     
+}); 
+
+var a = function (){$.ajax({
             url: '/myMessages',
             //success function is whats returned by the server
             // parse through json returned and print out the field in html
             success: function success(index){
                 //$("#printMessages").empty();
+                $("#pMsg").empty();
+                //console.log("Reloading");
                 var result = JSON.parse(index);
                 //alert("Returned successfully");
                  //$.each(result.messages, function(x, field){
@@ -102,6 +107,8 @@ $(document).ready(function(){
                 });*/
             }
         });
+                   };
+var interval = 1000 * 60 * 0.01; // where X is your every X minutes
 
+setInterval(a, interval);
     //});
-}); 

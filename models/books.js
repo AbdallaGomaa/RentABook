@@ -9,4 +9,6 @@ module.exports = mongoose.model('Book',{
     genre: String,
     language: String,
     publisher: String,
+    viewCount: {type: Number, default:0},
+    flag: {type: Number, default:0}
 });

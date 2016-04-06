@@ -17,7 +17,7 @@
 		    &nbsp;
 		</div>
         <% if(genre==false){ %>
-            <div class="well well-sm">Page 1 of 1 for "<%= search %>" Results</div>
+            <div class="well well-sm">Page 1 of <%=pages%> for "<%= search %>" Results</div>
         <% }else { %>
             <div class="well well-sm">Page 1 of 1 for "<%= genreN %>" Results</div>
         <% } %>
@@ -46,8 +46,10 @@
                                 
                     </div>
                 </div>
-                <button class="btn" id="prev">Prev</button>
-                <button class="btn" id="next">Next</button>
+                <%if(parseInt(page)>1){%>
+                <button class="btn" id="prev" onclick="window.location.href='/search?page=<%=(parseInt(page)-1)%>&name=<%=search%>'">Prev</button>
+                <%}%>
+                <button class="btn" id="next" onclick="window.location.href='/search?page=<%=(parseInt(page)+1)%>&name=<%=search%>'">Next</button>
             </div>
         </div>
 

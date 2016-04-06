@@ -44,7 +44,6 @@ var isAuthenticated = function (req, res, next) {
 	res.redirect('/');
 }
 
-
 module.exports = function(passport){
 
     
@@ -53,7 +52,7 @@ module.exports = function(passport){
 	router.get('/', function(req, res) {
     	// Display the Login page with any flash message, if any
         var allbooks = [];
-        Book.find({}, function(err, books){
+        /*Book.find({}, function(err, books){
             if(err)
                 throw err;
         
@@ -68,11 +67,150 @@ module.exports = function(passport){
                                 "photolink":books[i].photolink
                                 };
                 allbooks.push(bookObj);
-            }
-            if(req.isAuthenticated())
-                res.render('index', {state: 'loggedIn', books: allbooks });
-            else
-                res.render('index', {state: 'loggedOut', books: allbooks });
+            }*/
+           // var recommendedBooks=[];
+        
+        Book.find().sort({'viewCount': -1}).limit(6).exec(function(err,allbooks) {
+            //});
+                if(req.isAuthenticated()){
+                     var probArray=[];
+                    
+                    var temp = Math.floor(10*(req.user.viewCount.Action/req.user.viewCount.totalCount));
+                    for(var i=0; i<temp; i++)
+                        probArray.push("Action");
+
+                    temp = Math.floor(10*(req.user.viewCount.Comedy/req.user.viewCount.totalCount));
+                    for(var i=0; i<temp; i++)
+                        probArray.push("Comedy");
+
+                    temp = Math.floor(10*(req.user.viewCount.Fantasy/req.user.viewCount.totalCount));
+                    for(var i=0; i<temp; i++)
+                        probArray.push("Fantasy");
+
+                    temp = Math.floor(10*(req.user.viewCount.Fiction/req.user.viewCount.totalCount));
+                    for(var i=0; i<temp; i++)
+                        probArray.push("Fiction");
+
+                    temp = Math.floor(10*(req.user.viewCount.Mystery/req.user.viewCount.totalCount));
+                    for(var i=0; i<temp; i++)
+                        probArray.push("Mystery");
+
+                    temp = Math.floor(10*(req.user.viewCount.Romance/req.user.viewCount.totalCount));
+                    for(var i=0; i<temp; i++)
+                        probArray.push("Romance");
+
+                    temp = Math.floor(10*(req.user.viewCount.ScienceFiction/req.user.viewCount.totalCount));
+                    for(var i=0; i<temp; i++)
+                        probArray.push("Science Fiction");
+
+                    temp = Math.floor(10*(req.user.viewCount.Thriller/req.user.viewCount.totalCount));
+                    for(var i=0; i<temp; i++)
+                        probArray.push("Thriller");
+                    
+                    
+                    var prob=Math.floor(Math.random() * probArray.length);
+                    
+                    var suggestedBook = [];
+            
+                    Book.find({'genre':probArray[prob]}).sort({'viewCount': -1}).limit(1).exec(function(err,maxBook) {
+                        if(maxBook[0]){
+                            suggestedBook.push(maxBook[0]);
+                            maxBook[0].flag=1;
+                            maxBook[0].save(function(err) {
+                              if (err) throw err;
+                            });
+                        }
+                        
+                        prob=Math.floor(Math.random() * probArray.length);
+                        Book.find({'genre':probArray[prob], 'flag':0}).sort({'viewCount': -1}).limit(1).exec(function(err,maxBook1) {
+                             if(maxBook1[0]){
+                                suggestedBook.push(maxBook1[0]);
+                            
+                                maxBook1[0].flag=1;
+                                maxBook1[0].save(function(err) {
+                                  if (err) throw err;
+                                });
+                             }
+                            
+                            prob=Math.floor(Math.random() * probArray.length);
+                            Book.find({'genre':probArray[prob], 'flag':0}).sort({'viewCount': -1}).limit(1).exec(function(err,maxBook2) {
+                                 if(maxBook2[0]){
+                                    suggestedBook.push(maxBook2[0]);
+                                
+                                    maxBook2[0].flag=1;
+                                    maxBook2[0].save(function(err) {
+                                      if (err) throw err;
+                                    });
+                                 }
+                                
+                                prob=Math.floor(Math.random() * probArray.length);
+                                Book.find({'genre':probArray[prob], 'flag':0}).sort({'viewCount': -1}).limit(1).exec(function(err,maxBook3) {
+                                     if(maxBook3[0]){
+                                        suggestedBook.push(maxBook3[0]);
+                                    
+                                        maxBook3[0].flag=1;
+                                        maxBook3[0].save(function(err) {
+                                          if (err) throw err;
+                                        });
+                                     }
+                                    
+                                    prob=Math.floor(Math.random() * probArray.length);
+                                    Book.find({'genre':probArray[prob], 'flag':0}).sort({'viewCount': -1}).limit(1).exec(function(err,maxBook4) {
+                                        if(maxBook4[0]){
+                                            suggestedBook.push(maxBook4[0]);
+                                        
+                                            maxBook4[0].flag=1;
+                                            maxBook4[0].save(function(err) {
+                                              if (err) throw err;
+                                            });
+                                        }
+                                        
+                                        prob=Math.floor(Math.random() * probArray.length);
+                                        Book.find({'genre':probArray[prob], 'flag':0}).sort({'viewCount': -1}).limit(1).exec(function(err,maxBook5) {
+                                            if(maxBook5[0])
+                                                suggestedBook.push(maxBook5[0]);
+                                            
+                                            if(maxBook[0]){
+                                                maxBook[0].flag=0;
+                                                maxBook[0].save(function(err) {
+                                                  if (err) throw err;
+                                                });
+                                            }
+                                            if(maxBook1[0]){
+                                                maxBook1[0].flag=0;
+                                                maxBook1[0].save(function(err) {
+                                                  if (err) throw err;
+                                                });
+                                            }
+                                            if(maxBook2[0]){
+                                                maxBook2[0].flag=0;
+                                                maxBook2[0].save(function(err) {
+                                                  if (err) throw err;
+                                                });
+                                            }
+                                            if(maxBook3[0]){
+                                                maxBook3[0].flag=0;
+                                                maxBook3[0].save(function(err) {
+                                                  if (err) throw err;
+                                                });
+                                            }
+                                            if(maxBook4[0]){
+                                                maxBook4[0].flag=0;
+                                                maxBook4[0].save(function(err) {
+                                                  if (err) throw err;
+                                                });
+                                            }
+                    
+                                            res.render('index', {state: 'loggedIn', books: allbooks, suggested: suggestedBook});
+                                            });
+                                        });
+                                    });
+                                });
+                            });
+                        });
+                }else
+                    res.render('index', {state: 'loggedOut', books: allbooks, suggested: allbooks });
+            //});
         });
 	});	
     
@@ -211,9 +349,7 @@ module.exports = function(passport){
         var stream = fs.createReadStream(file.path);
         
         var type = file.type;
-        console.log("\n\n\n\n\n\n\n\n\n\n\n");
-        console.log(type);
-        console.log("\n\n\n\n\n\n\n\n\n\n\n");
+       
         //get the extension of the file
         var extension=mime.extension(type);
 
@@ -385,14 +521,64 @@ module.exports = function(passport){
     });
     
     router.get('/BookInfo', function(req, res){
+        
+                
         Book.findOne({'_id': req.param('book')}, function(err, book){
             if(err)
                 throw err;
             if(book){
-               if(req.isAuthenticated())
-                    res.render('BookInfo',{book: book, state:'loggedIn'});  
-               else
-                    res.render('BookInfo',{book: book, state:'loggedOut'});  
+                /*Book.find().sort({'viewCount': 1, "limit":5}, function(err, bk){
+                     
+                    recommendedBooks.push(bk);
+                });*/
+                
+                if(req.isAuthenticated()){
+                    User.findOne({'username':req.user.username}, function(err, user){
+                           switch(book.genre) { 
+                               case "Action":
+                                   user.viewCount.Action++;
+                                   break;
+                                case "Comedy":
+                                   user.viewCount.Comedy++;
+                                   break;
+                                case "Fantasy":
+                                   user.viewCount.Fantasy++;
+                                   break;
+                                case "Fiction":
+                                   user.viewCount.Fiction++;
+                                   break;
+                                case "Mystery":
+                                   user.viewCount.Mystery++;
+                                   break;
+                                case "Romance":
+                                   user.viewCount.Romance++;
+                                   break;
+                                case "Science Fiction":
+                                   user.viewCount.ScienceFiction++;
+                                   break;
+                                case "Thriller":
+                                   user.viewCount.Thriller++;
+                                   break;
+                           }
+                        user.viewCount.totalCount++;
+                        user.save(function(err) {
+                          if (err) throw err;
+                        });
+                    });
+                }
+                Book.find({'genre':book.genre}).sort({'viewCount': -1}).limit(3).exec(function(err,recommendedBooks) {
+                    
+                    
+                    book.viewCount++;
+                    book.save(function(err) {
+                      if (err) throw err;
+                    });
+                    console.log(recommendedBooks);
+                   if(req.isAuthenticated())
+                        res.render('BookInfo',{book: book, recommendedBooks: recommendedBooks, state:'loggedIn'});  
+                   else
+                        res.render('BookInfo',{book: book, recommendedBooks: recommendedBooks, state:'loggedOut'});  
+                });
             }
         });
     });
@@ -423,14 +609,62 @@ module.exports = function(passport){
         var cat = [];
         var genre = false;
         var genreN = " ";
-        Book.find({}, function(err, books){
+        
+        if(req.param('genre')==undefined){
+             Book.find({"title": { "$regex": req.param('name'), "$options": "i" } } ).skip(parseInt(req.param('page'))-1).limit(1).exec(function(err, books){
+                 
+                 if(req.param('cat')=='all' || req.param('cat')==undefined){
+                     searchRes=books;
+                     for (i in books){
+                         if(cat.indexOf(books[i].genre)==-1)
+                                cat.push(books[i].genre);
+                     }
+                 }else{
+                    for (i in books){
+                        if(cat.indexOf(books[i].genre)==-1)
+                                cat.push(books[i].genre);
+                        if(books[i].genre == req.param('cat'))
+                                searchRes.push(books[i]);
+                     }
+                 }
+                 Book.count({"title": { "$regex": req.param('name'), "$options": "i" }}, function(err, pages){
+                 
+                 
+                 if(req.isAuthenticated())
+                    res.render('resultspage',{books: searchRes, state:'loggedIn', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page'), pages:pages});
+                else
+                    res.render('resultspage',{books: searchRes, state:'loggedOut', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page'), pages:pages});  });
+             });
+        }
+        else{
+            Book.find({"genre":req.param('genre')}).skip(parseInt(req.param('page'))-1).limit(1).exec(function(err, books){
+                cat.push(req.param('genre'));
+                genre = true;
+                genreN = req.param('genre');
+                
+                if(req.isAuthenticated())
+                    res.render('resultspage',{books: books, state:'loggedIn', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page')});
+                else
+                    res.render('resultspage',{books: books, state:'loggedOut', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page')});
+            });
+        }
+            
+                 
+                 
+         /*        
+        Book.find({"title": { "$regex": req.param('name'), "$options": "i" } } ).skip(parseInt(req.param('page'))-1).limit(1).exec(function(err, books){
+            console.log("\n\n\n\n\n\n\n\n");
+            console.log(req.param('page'));
+            console.log(books);
+            console.log("\n\n\n\n\n\n\n\n");
             if(err)
                 throw err;
             console.log(req.param('name'));
         
             if(req.param('genre')==undefined){
                 for (i in books){
-                    if(req.param('name').toLowerCase()==books[i].title.toLowerCase() || req.param('name').toLowerCase()==books[i].author.toLowerCase()){
+                    //if(req.param('name').toLowerCase()==books[i].title.toLowerCase() || req.param('name').toLowerCase()==books[i].author.toLowerCase()){
+                    if(books[i].title.toLowerCase().indexOf(req.param('name').toLowerCase())>-1|| books[i].author.toLowerCase().indexOf(req.param('name').toLowerCase())>-1){
 
                         var bookObj = {"id": books[i]._id,
                                         "title": books[i].title, 
@@ -442,14 +676,14 @@ module.exports = function(passport){
                                         "photolink":books[i].photolink
                                         };
 
-                        if(cat.indexOf(bookObj.genre)==-1)
-                            cat.push(bookObj.genre);
+                        if(cat.indexOf(books[i].genre)==-1)
+                            cat.push(books[i].genre);
                         if(req.param('cat')=='all' || req.param('cat')==undefined)
-                            searchRes.push(bookObj);
+                            searchRes.push(books[i]);
                         else if(bookObj.genre == req.param('cat'))
-                            searchRes.push(bookObj);
+                            searchRes.push(books[i]);
 
-                    }
+                    //}
                 }
             }
             else{
@@ -478,7 +712,7 @@ module.exports = function(passport){
                 res.render('resultspage',{books: searchRes, state:'loggedIn', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN});
             else
                 res.render('resultspage',{books: searchRes, state:'loggedOut', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN});
-       });
+       });*/
     });
     
     

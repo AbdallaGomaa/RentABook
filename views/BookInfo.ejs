@@ -4,6 +4,7 @@
         <title><%= book.title %></title>
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.css">
 		<link type="text/css" rel="stylesheet" href="css/BookInfoStyle.css">
+        <link type="text/css" rel="stylesheet" href="css/HomepageStyle.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 		<script src="js/bootstrap.js" type="text/javascript"></script>
 	</head>
@@ -35,7 +36,7 @@
 								 <form class="form-horizontal" role="form" action="/sendMessage" method="POST">
 									<input type="hidden" class="form-control" id="to" name="to" value= "<%=book.user %>" placeholder="<%=book.user %>">
 									<textarea rows="10" cols="50" id="message" name="message" placeholder="Enter message here...."></textarea>
-									&nbsp
+									&nbsp;
 									<button type="submit" class="btn btn-default">
 										<span class="glyphicon glyphicon-envelope"></span>Send Message
 				  					</button>
@@ -70,6 +71,25 @@
 							<td>Description</td>
 							<td>This book is in mint condition. I am willing to rent it for a maximum of one month</td>
 						</tr>
+                        <tr>
+                            <td colspan="4">
+                                
+                            <% for(var i=0; i<recommendedBooks.length; i++) {%>
+                              <div class="col-md-2">
+                                <div class="thumbnail">
+                                  <img src="<%= recommendedBooks[i].photolink %>" width="100" height="100">
+                                  <div class="caption">
+                                    <h4><%= recommendedBooks[i].title %></h4>
+                                    <p><%= recommendedBooks[i].genre %></p>
+                                    <p><a href="BookInfo.html" class="btn btn-primary" role="button">Rent</a> <a href="/bookInfo?book=<%= recommendedBooks[i].id %>" class="btn btn-default" role="button">View</a></p>
+                                  </div>
+                                </div>
+                            </div>
+                          <% } %>
+                                                        
+                            </td>
+                            
+                        </tr>
 					</tbody>
 				</table>
 			</div>

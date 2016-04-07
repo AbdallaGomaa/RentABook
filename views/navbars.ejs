@@ -9,14 +9,14 @@
 					Search by Genre <span class="caret"></span>
 				  </button>
 				  <ul class="dropdown-menu">
-					<li><a href="/search?genre=Action">Action</a></li>
-					<li><a href="/search?genre=Comedy">Comedy</a></li>
-					<li><a href="/search?genre=Fantasy">Fantasy</a></li>
-					<li><a href="/search?genre=Fiction">Fiction</a></li>
-					<li><a href="/search?genre=Mystery">Mystery</a></li>
-					<li><a href="/search?genre=Romance">Romance</a></li>
-					<li><a href="/search?genre=Science Fiction">Science Fiction</a></li>
-					<li><a href="/search?genre=Thriller">Thriller</a></li>
+					<li><a href="/search?genre=Action&page=1">Action</a></li>
+					<li><a href="/search?genre=Comedy&page=1">Comedy</a></li>
+					<li><a href="/search?genre=Fantasy&page=1">Fantasy</a></li>
+					<li><a href="/search?genre=Fiction&page=1">Fiction</a></li>
+					<li><a href="/search?genre=Mystery&page=1">Mystery</a></li>
+					<li><a href="/search?genre=Romance&page=1">Romance</a></li>
+					<li><a href="/search?genre=Science Fiction&page=1">Science Fiction</a></li>
+					<li><a href="/search?genre=Thriller&page=1">Thriller</a></li>
 				  </ul>
 				</div>
 				
@@ -38,9 +38,6 @@
 				    <% }else if(state=='loggedIn'){ %>
                         <button type="button" class="btn btn-default navbar-btn" onclick="location.href='/profile';">Profile</button>
 					    <button type="button" class="btn btn-default navbar-btn" onclick="location.href='/signout';">Log Out</button>
-					    <button type="button" class="btn btn-default navbar-btn">
-						    <span class="glyphicon glyphicon-shopping-cart"></span>Cart
-					    </button>
 				    <% } %>
 				</div>
 			</div>

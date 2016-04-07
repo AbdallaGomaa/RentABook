@@ -109,7 +109,7 @@ $(document).ready(function(){
 
     $("#printbooks").empty();
     $.ajax({
-        url: '/mybooks',
+        url: '/books',
         //success function is whats returned by the server
         // parse through json returned and print out the field in html
         success: function success(index){
@@ -124,7 +124,7 @@ $(document).ready(function(){
                 "<h4>"+field.title+"</h4>"+
                 "<p>"+field.author+"</p>"+
                 "<p>"+field.genre+"</p>"+
-                "<p><a href=\"/deleteBook?bookid="+field.id+"\" id=\"deleteButton\"class=\"btn btn-danger\" role=\"button\">Delete</a><a href=\"/BookInfo?book="+field.id+"\" class=\"btn btn-default\" role=\"button\">View</a></p>"+
+                "<p><a href=\"/deleteBook?bookid="+field._id+"\" id=\"deleteButton\"class=\"btn btn-danger\" role=\"button\">Delete</a><a href=\"/BookInfo?book="+field._id+"\" class=\"btn btn-default\" role=\"button\">View</a></p>"+
               "</div>"+
             "</div>");
                 //$("#printbooks").append("Title: "+field.title +"<br>" + "Author: "+ field.author +"<br>" +"Price: "+ field.price +"<br>" + "Photo: <img src=\"uploads/"+ field.photolink+"\" \"><br><br>");

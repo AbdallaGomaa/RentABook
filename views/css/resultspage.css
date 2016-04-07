@@ -4,13 +4,14 @@ body{
 }
 
 
-.book :hover{
+/*#rImage :hover{
     width: 300px;
     transition: 1s;
 }
+
 .book {
     transition: 1s;
-}
+}*/
 resultbar{
 }
 button{

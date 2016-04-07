@@ -321,18 +321,25 @@ module.exports = function(passport){
 	});
     
     router.get('/user', isAuthenticated, function(req, res){
-        User.findOne({'username': req.param('username')}, function(err, user){
-            if(err)
-                throw err;
-            if(user){
-                if(req.isAuthenticated())
-                    res.render('profile-2',{user: user, state:'loggedIn'});  
+        if(req.param('username')==req.user.username){
+            if(req.isAuthenticated())
+                    res.render('profile',{user: req.user, state:'loggedIn'});  
                 else
-                    res.render('profile-2',{user: user, state:'loggedOut'});  
-                }
-            else
-                console.log('user not found');
-         });
+                    res.render('profile',{user: req.user, state:'loggedOut'});  
+        }else{
+            User.findOne({'username': req.param('username')}, function(err, user){
+                if(err)
+                    throw err;
+                if(user){
+                    if(req.isAuthenticated())
+                        res.render('profile-2',{user: user, state:'loggedIn'});  
+                    else
+                        res.render('profile-2',{user: user, state:'loggedOut'});  
+                    }
+                else
+                    console.log('user not found');
+             });
+        }
        
 	});
     
@@ -395,132 +402,21 @@ module.exports = function(passport){
         });
     });
     
-    /*
-    router.post('/addbook', upload.single('mypic'), function(req,res){
-    //router.post('/addbook', function(req,res){
-    //add book
-       if(req.file!=undefined){
-            var is;
-            var os;
-            var targetPath;
-            var targetName;
-            var tempPath = req.file.path;
-            //get the mime type of the file
-            var type = req.file.mimetype;
-            //get the extension of the file
-            var extension=mime.extension(type);
-
-            //check to see if we support the file type
-            if (IMAGE_TYPES.indexOf(type) == -1) {
-              res.send(415, 'Supported image formats: jpeg, jpg, jpe, png.');
-            }
-
-            //create a new name for the image
-            targetName = uid(22) + '.' + extension;
-            console.log("targetName: "+targetName);
-            //determine the new path to save the image
-            targetPath = path.join(TARGET_PATH, targetName);
-            console.log("targetPath: "+targetPath);
-            //create a read stream in order to read the file
-            is = fs.createReadStream(tempPath);
-
-            //create a write stream in order to write the a new file
-            os = fs.createWriteStream(targetPath);
-
-            is.pipe(os);
-
-
-            //handle error
-            is.on('error', function() {
-              if (err) {
-                res.send(500, 'Something went wrong');
-              }
-            });
-            //if we are done moving the file
-            is.on('end', function() {
-
-
-              //delete file from temp folder
-              fs.unlink(tempPath, function(err) {
-                if (err) {
-                  res.send(500, 'Something went wrong');
-                }
-
-                //send something nice to user
-
-
-              });
-            });
-       }
-    else {
-        var targetname="";
-    }
-    addBook = function(){
-         
-        
-        
-        
-        var newbook = new Book();
-        
-        
-                        // set the user's local credentials
-                        newbook.title = req.param('booktitle');
-                        newbook.author = req.param('bookauthor');
-                        newbook.price = req.param('bookcost');
-                        newbook.genre = req.param('genre');
-                        newbook.language = req.param('language');
-                        newbook.publisher = req.param('publisher');
-                        newbook.description = req.param('description');
-                        newbook.photolink = targetName;
-                        console.log(req.user.username);
-                        newbook.user = req.user.username;
-                            newbook.save(function(err) {
-                            if (err){
-                                console.log('Error in Saving book: '+err);  
-                                throw err;  
-                            }
-                            console.log('Book Registration succesful');    
-                            });
-            }
-            // Delay the execution of addbook and execute the method
-            process.nextTick(addBook);
-        
-        res.redirect('/profile');
-        
-    });*/
-    
-    router.get('/mybooks', function(req, res){
+    router.get('/books', function(req, res){
         var books = [];
         
-        Book.find({}, function(err, users){
-            if(err)
-                throw err;
+        var user;
+        if(req.param("user")==undefined){
+            user=req.user.username;
+        }else{
+            user=req.param("user");
+        }
         
-            for (i in users){
-                if(req.user.username==users[i].user){
-                
-                    var bookObj = {"id": users[i]._id,
-                                    "title": users[i].title, 
-                                    "author": users[i].author, 
-                                    "price":users[i].price,
-                                    "genre":users[i].genre,
-                                    "language":users[i].language,
-                                    "publisher":users[i].publisher,
-                                    "description":users[i].description,
-                                    "photolink":users[i].photolink
-                                    };
-                    
-                    //returnedJSON.push(bookObj);
-                    books.push(bookObj);
-                    
-                }
-            }
-             var returnOBJ = {"code":200, 
+        Book.find({'user': user}, function(err, books){
+            var returnOBJ = {"code":200, 
                                 "book":books};
-            console.log(JSON.stringify(returnOBJ, null, 2));
             res.write(JSON.stringify(returnOBJ, null, 2));
             res.end();
-       
         });
     });
     
@@ -531,11 +427,6 @@ module.exports = function(passport){
             if(err)
                 throw err;
             if(book){
-                /*Book.find().sort({'viewCount': 1, "limit":5}, function(err, bk){
-                     
-                    recommendedBooks.push(bk);
-                });*/
-                
                 if(req.isAuthenticated()){
                     User.findOne({'username':req.user.username}, function(err, user){
                            switch(book.genre) { 
@@ -617,6 +508,7 @@ module.exports = function(passport){
         if(req.param('genre')==undefined){
              Book.find({"title": { "$regex": req.param('name'), "$options": "i" } } ).skip(parseInt(req.param('page'))-1).limit(1).exec(function(err, books){
                  
+                 
                  if(req.param('cat')=='all' || req.param('cat')==undefined){
                      searchRes=books;
                      for (i in books){
@@ -634,10 +526,11 @@ module.exports = function(passport){
                  Book.count({"title": { "$regex": req.param('name'), "$options": "i" }}, function(err, pages){
                  
                  
-                 if(req.isAuthenticated())
-                    res.render('resultspage',{books: searchRes, state:'loggedIn', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page'), pages:pages});
-                else
-                    res.render('resultspage',{books: searchRes, state:'loggedOut', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page'), pages:pages});  });
+                     if(req.isAuthenticated())
+                        res.render('resultspage',{books: searchRes, state:'loggedIn', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page'), pages:pages});
+                    else
+                        res.render('resultspage',{books: searchRes, state:'loggedOut', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page'), pages:pages});  
+                 });
              });
         }
         else{
@@ -646,78 +539,15 @@ module.exports = function(passport){
                 genre = true;
                 genreN = req.param('genre');
                 
-                if(req.isAuthenticated())
-                    res.render('resultspage',{books: books, state:'loggedIn', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page')});
-                else
-                    res.render('resultspage',{books: books, state:'loggedOut', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page')});
+                Book.count({"genre":req.param('genre')}, function(err, pages){
+                    
+                    if(req.isAuthenticated())
+                        res.render('resultspage',{books: books, state:'loggedIn', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page'), pages:pages});
+                    else
+                        res.render('resultspage',{books: books, state:'loggedOut', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN, page:req.param('page'), pages:pages});
+                }); 
             });
         }
-            
-                 
-                 
-         /*        
-        Book.find({"title": { "$regex": req.param('name'), "$options": "i" } } ).skip(parseInt(req.param('page'))-1).limit(1).exec(function(err, books){
-            console.log("\n\n\n\n\n\n\n\n");
-            console.log(req.param('page'));
-            console.log(books);
-            console.log("\n\n\n\n\n\n\n\n");
-            if(err)
-                throw err;
-            console.log(req.param('name'));
-        
-            if(req.param('genre')==undefined){
-                for (i in books){
-                    //if(req.param('name').toLowerCase()==books[i].title.toLowerCase() || req.param('name').toLowerCase()==books[i].author.toLowerCase()){
-                    if(books[i].title.toLowerCase().indexOf(req.param('name').toLowerCase())>-1|| books[i].author.toLowerCase().indexOf(req.param('name').toLowerCase())>-1){
-
-                        var bookObj = {"id": books[i]._id,
-                                        "title": books[i].title, 
-                                        "author": books[i].author, 
-                                        "price":books[i].price,
-                                        "genre":books[i].genre,
-                                        "language":books[i].language,
-                                        "publisher":books[i].publisher,
-                                        "photolink":books[i].photolink
-                                        };
-
-                        if(cat.indexOf(books[i].genre)==-1)
-                            cat.push(books[i].genre);
-                        if(req.param('cat')=='all' || req.param('cat')==undefined)
-                            searchRes.push(books[i]);
-                        else if(bookObj.genre == req.param('cat'))
-                            searchRes.push(books[i]);
-
-                    //}
-                }
-            }
-            else{
-                genre = true;
-                genreN = req.param('genre');
-                for (i in books){
-                    if(req.param('genre')==books[i].genre){
-
-                        var bookObj = {"id": books[i]._id,
-                                        "title": books[i].title, 
-                                        "author": books[i].author, 
-                                        "price":books[i].price,
-                                        "genre":books[i].genre,
-                                        "language":books[i].language,
-                                        "publisher":books[i].publisher,
-                                        "description":books[i].description,
-                                        "photolink":books[i].photolink
-                                        };
-                        if(cat.indexOf(bookObj.genre)==-1)
-                            cat.push(bookObj.genre);
-                        searchRes.push(bookObj);
-
-                    }
-                }                    
-            }
-            if(req.isAuthenticated())
-                res.render('resultspage',{books: searchRes, state:'loggedIn', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN});
-            else
-                res.render('resultspage',{books: searchRes, state:'loggedOut', search: req.param('name'), cat: cat, catv: req.param('cat'), genre: genre, genreN: genreN});
-       });*/
     });
     
     

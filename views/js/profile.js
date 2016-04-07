@@ -46,14 +46,7 @@ $(document).ready(function(){
 
     //$("#myMessages").click(function(){
         //$("#printMessages").empty();
-     
-}); 
-
-/*("#asdf").onclick = function(){
-    console.log("aa;lkdfj;lasjdflsdajfldskjaf;laskdjfdas;lkfjal;kjf");  
-};*/
-
-var a = function (){$.ajax({
+        var a = function (){$.ajax({
             url: '/myMessages',
             //success function is whats returned by the server
             // parse through json returned and print out the field in html
@@ -135,4 +128,12 @@ var a = function (){$.ajax({
 var interval = 1000 * 60 * 0.01; // where X is your every X minutes
 
 setInterval(a, interval);
+     
+}); 
+
+/*("#asdf").onclick = function(){
+    console.log("aa;lkdfj;lasjdflsdajfldskjaf;laskdjfdas;lkfjal;kjf");  
+};*/
+
+
     //});

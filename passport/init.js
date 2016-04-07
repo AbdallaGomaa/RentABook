@@ -7,6 +7,7 @@ module.exports = function(passport){
 
 	// Passport needs to be able to serialize and deserialize users to support persistent login sessions
     passport.serializeUser(function(user, done) {
+        console.log('in');
         done(null, user._id);
     });
 

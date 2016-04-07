@@ -84,18 +84,6 @@ describe('Tests', function() {
            done();
         });
     });
-    /*it('Testing JSON from /mybooks', function(done) {
-        chai.request('http://localhost:3000')
-        .get('/mybooks')
-        .end(function(err, res){
-          //res.should.have.status(200);
-          res.should.be.json;
-          //res.body.should.be.a('object');
-          res.body.should.have.property('code');
-          res.body.should.have.property('book');
-          done();
-        });
-    });*/
     
   after(function(done) {
         User.findOne({'username': 'abcdef'}, function(err, user){

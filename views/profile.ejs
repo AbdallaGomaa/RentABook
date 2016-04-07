@@ -49,9 +49,12 @@
 
 			<div class="tab-content">
 				<div id="home" class="tab-pane fade in active">
-		    		<h3 class="print">Welecome <%= user.firstName%>, <br><br> Your account info is as follows: </h3>
+		    		<h3 class="print">Welcome <%= user.firstName%>, <br><br> Your account info is as follows: </h3>
                 &nbsp;
-                    <div clas="row">
+                   <div clas="row">
+                        <div class="col-sm-10" ><h2 style="padding: 0 ; margin:0">User name: <%= user.username%></h2></div>
+                    </div> 
+                   <div clas="row">
                         <div class="col-sm-10" ><h2 style="padding: 0 ; margin:0">First name: <%= user.firstName%></h2></div>
                         <div class="col-sm-2"><button id="fNameButton"class="btn btn-default">Edit</button></div>
                     </div> 

@@ -1,7 +1,4 @@
 $(document).ready(function(){
-    $("#deleteButton").click(function(){
-        $("#table").toggle();
-        });
     $("#titleButton").click(function(){
        $("#titleTd").toggle();
         $("#titleTogg").toggle();
@@ -25,6 +22,10 @@ $(document).ready(function(){
     $("#priceButton").click(function(){
        $("#priceTd").toggle();
         $("#priceTogg").toggle();
+    });
+    $("#desButton").click(function(){
+        $("#desTd").toggle();
+        $("#desTogg").toggle();
     });
     
     

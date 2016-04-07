@@ -1,3 +1,6 @@
+/*
+Scotch.io tutorial was followed to achieve this facebook task
+*/
 var FacebookStrategy = require('passport-facebook').Strategy;
 var User = require('../models/users');
 var fb = require('../fb.js');

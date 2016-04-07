@@ -1,3 +1,7 @@
+/*
+The following was started using an express.js app generator 
+And some of the the routine functions of the app was from Scotch.io
+*/
 var compress = require('compression');	
 var express = require('express');
 var path = require('path');

@@ -48,7 +48,7 @@ module.exports = function(passport){
 
     
     router.use(multipartyMiddleware);
-	/* GET login page. */
+	/* GET home page. */
 	router.get('/', function(req, res) {
     	// Display the Login page with any flash message, if any
         var allbooks = [];
@@ -213,14 +213,14 @@ module.exports = function(passport){
             //});
         });
 	});	
-    
+/***********************************************************************************************************************************************/   
     router.get('/admin', function(req, res) {
 		if(req.isAuthenticated())
             res.render('admin', {state: 'loggedIn' });
         else
             res.render('admin', {state: 'loggedOut' });
 	});
-    
+/***********************************************************************************************************************************************/  
     router.post('/changePass',function(req, res, username){ 
         User.findOne({'username': req.body.username}, function(err, user){
             if(err)
@@ -237,8 +237,10 @@ module.exports = function(passport){
          });
         res.redirect('/');
     });
-    
+/***********************************************************************************************************************************************/    
     router.post('/changeInfo',function(req, res, username){ 
+        var useroradmin=req.param('user');
+        
         User.findOne({'username': req.body.username}, function(err, user){
             var variable = req.body.infoChange;
             if(err)
@@ -260,9 +262,13 @@ module.exports = function(passport){
                 console.log('user not found');
             }
          });
+        if(useroradmin==1)
+        res.redirect('/profile');
+        else
         res.redirect('/');
+            
     });
-
+/***********************************************************************************************************************************************/
     router.post('/deleteUser',function(req, res, username){ 
         User.findOne({'username': req.body.username}, function(err, user){
             var variable = req.body.infoChange;
@@ -279,39 +285,47 @@ module.exports = function(passport){
         });
         res.redirect('/');
     });
-    
+/***********************************************************************************************************************************************/    
 	router.get('/login', function(req, res) {
     	// Display the Login page with any flash message, if any
+        var fail=0;
+        if(req.param('fail')=="true")
+            fail=1;
         if(req.isAuthenticated())
-            res.render('login', {state: 'loggedIn'});
+            res.render('login', {state: 'loggedIn',fail:fail});
         else
-            res.render('login', {state: 'loggedOut'});
+            res.render('login', {state: 'loggedOut',fail:fail});
 	});
     
 
 	/* Handle Login POST */
+/***********************************************************************************************************************************************/
 	router.post('/login', passport.authenticate('login', {
 		successRedirect: '/profile',
-		failureRedirect: '/',
-		failureFlash : true  
+		failureRedirect: '/login?fail=true',
+		failureFlash :true
 	}));
 
 	/* GET Registration Page */
+/***********************************************************************************************************************************************/
 	router.get('/signup', function(req, res){
+        var fail=0;
+        if(req.param('fail')=="true")
+            fail=1;
 		if(req.isAuthenticated())
-            res.render('signup',{state: 'loggedIn'});
+            res.render('signup',{state: 'loggedIn',fail:fail});
         else
-            res.render('signup',{state: 'loggedOut'});
+            res.render('signup',{state: 'loggedOut',fail:fail});
 	});
 
 	/* Handle Registration POST */
+/***********************************************************************************************************************************************/
 	router.post('/signup', passport.authenticate('signup', {
 		successRedirect: '/profile',
-		failureRedirect: '/signup',
+		failureRedirect: '/signup?fail=true',
 		failureFlash : true  
 	}));
-
-	/* GET Home Page */
+/***********************************************************************************************************************************************/
 	router.get('/profile', isAuthenticated, function(req, res){
 		console.log(req.user);
         if(req.isAuthenticated())
@@ -319,7 +333,7 @@ module.exports = function(passport){
         else
             res.render('profile', { user: req.user, state: 'loggedOut' });
 	});
-    
+ /**********************************************************************************************************************************************/   
     router.get('/user', isAuthenticated, function(req, res){
         if(req.param('username')==req.user.username){
             if(req.isAuthenticated())
@@ -342,16 +356,16 @@ module.exports = function(passport){
         }
        
 	});
-    
+/***********************************************************************************************************************************************/    
     router.get('/facebook', passport.authenticate('facebook', { 
         scope : ['email']
     }));
-    
+/***********************************************************************************************************************************************/    
     router.get('/facebook/callback',passport.authenticate('facebook', {
             successRedirect : '/profile',
             failureRedirect : '/'
     }));
-    
+/***********************************************************************************************************************************************/    
     router.post('/addbook', function(req,res){
         var file = req.files.mypic;
 
@@ -384,6 +398,7 @@ module.exports = function(passport){
                     newbook.genre = req.param('genre');
                     newbook.language = req.param('language');
                     newbook.publisher = req.param('publisher');
+                    newbook.description = req.param('description');
                     newbook.photolink = "https://s3.amazonaws.com/rentabookk/"+targetName;
                     console.log(req.user.username);
                     newbook.user = req.user.username;
@@ -401,7 +416,8 @@ module.exports = function(passport){
             res.redirect('/profile');
         });
     });
-    
+/***********************************************************************************************************************************************/    
+   
     router.get('/books', function(req, res){
         var books = [];
         
@@ -419,7 +435,7 @@ module.exports = function(passport){
             res.end();
         });
     });
-    
+/***********************************************************************************************************************************************/    
     router.get('/BookInfo', function(req, res){
         
                 
@@ -477,8 +493,7 @@ module.exports = function(passport){
             }
         });
     });
-    
-
+ /**********************************************************************************************************************************************/   
     router.post('/addreview', function(req,res) {
         User.findOne({'username': req.param('username')}, function(err, user){
             if(err)
@@ -499,6 +514,7 @@ module.exports = function(passport){
         res.redirect('/user?username='+req.param('username'));
     });
     
+ /**********************************************************************************************************************************************/   
     router.get('/search', function(req, res){
         var searchRes = [];
         var cat = [];
@@ -552,6 +568,7 @@ module.exports = function(passport){
     
     
 	/* Handle Logout */
+/***********************************************************************************************************************************************/
 	router.get('/signout', function(req, res) {
 		req.logout();
         console.log('out');
@@ -559,6 +576,7 @@ module.exports = function(passport){
 	});
     
     /* Send a Message */
+/***********************************************************************************************************************************************/
     router.post('/sendMessage', function(req,res){
     //send message
         sendMess = function(){
@@ -581,7 +599,7 @@ module.exports = function(passport){
                 if(toExists){
                     msg.save(function(err){
                        if(err){
-                           console.log('Error sending message: ' + err);
+                           console.log('Error sending message: ');
                            throw err;
                        }
                         console.log("Message sent");
@@ -599,6 +617,7 @@ module.exports = function(passport){
         res.redirect('/profile');
         
     });
+/***********************************************************************************************************************************************/
     
     /* Delete Message */
     router.post('/delMessage', function(req,res){
@@ -621,6 +640,7 @@ module.exports = function(passport){
     });
     
     /* Get the messages */
+/***********************************************************************************************************************************************/
     router.get('/myMessages', function(req, res){
         var messages = [];
         //db.getCollection('books').find({})
@@ -655,6 +675,7 @@ module.exports = function(passport){
        
         });
     });
+/***********************************************************************************************************************************************/
     router.post('/changePass2',function(req, res){ 
         User.findOne({'username': req.user.username}, function(err, user){
             if(err)
@@ -675,6 +696,7 @@ module.exports = function(passport){
          });
         res.redirect('/profile');
     });
+/***********************************************************************************************************************************************/
     router.post('/changeBookInfo',function(req, res){ 
         Book.findOne({'_id': req.body.bookid}, function(err,book){
             var variable = req.body.infoChange;
@@ -693,6 +715,8 @@ module.exports = function(passport){
                     book.publisher = req.body.change;
                 else if(variable=='price')
                     book.price = req.body.change;
+                else if(variable=='description')
+                    book.description = req.body.change;
                 book.save(function(err) {
                   if (err) throw err;
                 });
@@ -704,6 +728,7 @@ module.exports = function(passport){
         var bookreturn='/bookInfo?book='+req.body.bookid;
         res.redirect(bookreturn);
     });
+/***********************************************************************************************************************************************/    
     router.get('/deleteBook',function(req, res){ 
         
         Book.findOne({'_id': req.param('bookid')}, function(err,book){
@@ -711,15 +736,13 @@ module.exports = function(passport){
                 book.remove(function(err) {
                   if (err) throw err;
                   });
-                console.log('\n\n\n\n\n\n');
+             
                   console.log('Book Deleted');
-            console.log('\n\n\n\n\n\n');}
+           }
             else{
                 console.log('Book not found');
-                console.log('\n\n\n\n\n\n');
-                console.log(req.param('bookid'));
-                console.log('\n\n\n\n\n\n');
             }
+
         });
         res.redirect('/profile');
     });

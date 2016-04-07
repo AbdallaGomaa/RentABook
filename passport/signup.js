@@ -1,3 +1,6 @@
+/*
+Scotch.io tutorial was followed to achieve this signup task
+*/
 var LocalStrategy   = require('passport-local').Strategy;
 var User = require('../models/users');
 var bCrypt = require('bcrypt-nodejs');

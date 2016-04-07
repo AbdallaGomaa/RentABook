@@ -31,8 +31,8 @@
 							<td rowspan="8"><img id="bigImage" src="<%= book.photolink %>"></td>
 							<td>Book Title</td>
 							<td ><div class="col-md-4" id="titleTd"><%= book.title %></div>
-                            <div class="col-md-8">
-                                <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit"id="titleButton">edit</button><%}%>
+                                 <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit"id="titleButton">edit</button><%}%>
+                                <div class="col-md-8">
                                     <div class="pull-left"id="titleTogg" style="display:none">
                                         <form id="input1"class="form-horizontal" role="form" action="/changeBookInfo" method="POST">
                                             <div class="col-sm-offset-0 col-sm-8">
@@ -52,8 +52,8 @@
 						<tr>
 							<td>Author</td>
 							<td><div class="col-md-4" id="authorTd"><%= book.author %></div>
-                            <div class="col-md-8">
-                                    <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit" id="authorButton">edit</button><%}%>
+                                 <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit" id="authorButton">edit</button><%}%>
+                                <div class="col-md-8">
                                     <div class="pull-left"id="authorTogg" style="display:none">
                                         <form id="input2"class="form-horizontal" role="form" action="/changeBookInfo" method="POST">
                                             <div class="col-sm-offset-0 col-sm-8">
@@ -88,8 +88,8 @@
 						<tr>
 							<td>Genres</td>
                             <td><div class="col-md-4" id="genreTd"><%= book.genre %></div>
-                            <div class="col-md-8">
-                                    <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit" id="genreButton">edit</button><%}%>
+                                <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit" id="genreButton">edit</button><%}%>
+                                <div class="col-md-8">
                                     <div class="pull-left"id="genreTogg" style="display:none">
                                         <form id="input3"class="form-horizontal" role="form" action="/changeBookInfo" method="POST">
                                             <div class="col-sm-offset-0 col-sm-8">
@@ -108,8 +108,8 @@
 						<tr>
 							<td>Language</td>
 							<td><div class="col-md-4" id="langTd"><%= book.language%></div>
-                            <div class="col-md-8">
                                 <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit"id="langButton">edit</button><%}%>
+                                <div class="col-md-8">
                                     <div class="pull-left"id="langTogg" style="display:none">
                                         <form id="input4"class="form-horizontal" role="form" action="/changeBookInfo" method="POST">
                                             <div class="col-sm-offset-0 col-sm-8">
@@ -128,8 +128,8 @@
 						<tr>
 							<td>Publisher</td>
 							<td><div class="col-md-4" id="pubTd"><%= book.publisher%></div>
+                            <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit"id="pubButton">edit</button><%}%>
                             <div class="col-md-8">
-                                <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit"id="pubButton">edit</button><%}%>
                                     <div class="pull-left"id="pubTogg" style="display:none">
                                         <form id="input5"class="form-horizontal" role="form" action="/changeBookInfo" method="POST">
                                             <div class="col-sm-offset-0 col-sm-8">
@@ -148,8 +148,8 @@
 						<tr>
 							<td>Price</td>
 							<td><div class="col-md-4" id="priceTd">$<%= book.price%></div>
-                            <div class="col-md-8">
-                            <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit" id="priceButton">edit</button><%}%>
+                                <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit" id="priceButton">edit</button><%}%>
+                                <div class="col-md-8">
                                     <div class="pull-left"id="priceTogg" style="display:none">
                                         <form id="input6"class="form-horizontal" role="form" action="/changeBookInfo" method="POST">
                                             <div class="col-sm-offset-0 col-sm-8">
@@ -171,10 +171,25 @@
 						</tr>
 						<tr>
 							<td>Description</td>
-							<td><div class="col-md-4" id="desTd">$<%= book.description%></div>
-                            <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit"id="desButton">edit</button><%}%></td>
+							<td><div class="col-md-4" id="desTd"><%= book.description%></div>
+                            <% if(state=='loggedIn'&& book.user==user.username){ %><button class="btn btn-default pull-right edit"id="desButton">edit</button><%}%>
+                            <div class="col-md-8">
+                                    <div class="pull-left"id="desTogg" style="display:none">
+                                        <form id="input6"class="form-horizontal" role="form" action="/changeBookInfo" method="POST">
+                                            <div class="col-sm-offset-0 col-sm-8">
+                                                <input type="text" class="form-control" id="change" name="change" placeholder="<%=book.description%>">
+                                                <input type="hidden" class="form-control" id="bookid" name="bookid" value="<%=book.id%>">
+                                                <input type="hidden" class="form-control" id="desc" name="infoChange" value="description">
+                                            </div>
+                                            <div class="col-sm-offset-0 col-sm-8">
+                                                <button type="submit" class="btn btn-default edit">Edit description</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                            </div>
+                            </td>
 						</tr>
-                                       
+
 					</tbody>
 				</table>
 			</div>

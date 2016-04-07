@@ -1,3 +1,6 @@
+/*
+Scotch.io tutorial was followed to achieve this init task
+*/
 var login = require('./login');
 var signup = require('./signup');
 var User = require('../models/users');

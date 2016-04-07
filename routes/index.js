@@ -255,10 +255,10 @@ module.exports = function(passport){
                 });
                 console.log(variable+' Changed');
             }
-            else
+            else{
                 console.log(req.body);
                 console.log('user not found');
-                
+            }
          });
         res.redirect('/');
     });

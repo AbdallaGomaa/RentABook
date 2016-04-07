@@ -125,7 +125,7 @@ $(document).ready(function(){
             }
         });
                    };
-var interval = 1000 * 60 * 0.01; // where X is your every X minutes
+var interval = 10000 * 60 * 0.01;
 
 setInterval(a, interval);
      

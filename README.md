@@ -1,7 +1,7 @@
 This project was made by the following people:\n
-Abdallah Ahmed\n
-Ahmed Keshk \n
-Aser Eldamaty
+Abdallah Ahmed, 
+Ahmed Keshk, 
+Aser Eldamaty, 
 Ziyad Helali
 
 

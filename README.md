@@ -7,7 +7,7 @@ Ziyad Helali
 
 This website allows you to post a book up for rent and allows you to rent book from others.
 
-This website is also hosted by Heroku. Visit it at www.rentabookk.herokuapp.com
+This website is also hosted by Heroku. Visit it at rentabookk.herokuapp.com
 
 Images that are uploaded are stored on Amazon's S3 Web Service.
 

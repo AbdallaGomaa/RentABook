@@ -1,6 +1,6 @@
-This project was made by the following people:
-Abdallah Ahmed
-Ahmed Keshk
+This project was made by the following people:\n
+Abdallah Ahmed\n
+Ahmed Keshk \n
 Aser Eldamaty
 Ziyad Helali
 
